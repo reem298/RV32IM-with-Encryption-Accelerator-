@@ -7,7 +7,7 @@ import uvm_pkg::*;
 import MULT_seq_item::*;
 `include "uvm_macros.svh"
 
-class mult_driver extends uvm_driver;
+class mult_driver extends uvm_driver#(mult_seq_item);
 `uvm_component_utils(mult_driver)
 virtual MULT_interface mult_driver_vif;
 mult_seq_item stim_seq_item;

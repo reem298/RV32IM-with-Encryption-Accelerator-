@@ -33,6 +33,11 @@ sb = mult_scoreboard::type_id::create("sb", this);
 cov = mult_coverage::type_id::create("cov", this);
 endfunction : build_phase
 
+//connect phase
+        function void connect_phase (uvm_phase phase);
+            agt.agt_ap.connect(sb.sb_export);
+            agt.agt_ap.connect(cov.cov_export);
+        endfunction : connect_phase
 
 endclass : mult_env	
 

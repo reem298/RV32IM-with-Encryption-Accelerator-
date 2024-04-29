@@ -7,11 +7,12 @@ package MULT_sequencer;
 	import uvm_pkg::*;
 	`include "uvm_macros.svh"
 
-	class mult_sequencer extends uvm_sequencer #(mult_seq_item);
+class mult_sequencer extends uvm_sequencer #(mult_seq_item);
 		`uvm_component_utils(mult_sequencer)
+//constructor
+function new (string name = "mult_sequencer", uvm_component parent = null);
+	super.new(name, parent);
+endfunction
 
-		function new (string name = "mult_sequencer", uvm_component parent = null);
-			super.new(name, parent);
-		endfunction
 	endclass : mult_sequencer
 endpackage

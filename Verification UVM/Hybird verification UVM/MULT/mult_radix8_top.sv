@@ -8,8 +8,8 @@ module mult_radix8_top #(parameter length=32)(MULT_interface.DUT multIF);
    assign OPER_A= multIF.OPER_A;
    assign OPER_B= multIF.OPER_B;
    assign ENABLE_MULT=multIF.ENABLE_MULT;
-   assign MULT_O= multIF.MULT_O;
-   assign MULT_FINISH=multIF.MULT_FINISH;
+   assign multIF.MULT_O= MULT_O;
+   assign multIF.MULT_FINISH=MULT_FINISH;
   
    logic  [length:0] partial1_booth, partial2_booth, partial3_booth, partial4_booth;
    logic  [length:0] partial5_booth, partial6_booth, partial7_booth, partial8_booth;   

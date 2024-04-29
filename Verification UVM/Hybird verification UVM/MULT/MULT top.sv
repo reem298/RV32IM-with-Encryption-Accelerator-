@@ -3,12 +3,12 @@
 //MULT TOP
 
 
-`include "uvm_macros.svh"
 import MULT_config_obj::*;
 import MULT_driver::*;
 import MULT_env::*;
 import MULT_test::*;
 import uvm_pkg::*;
+`include "uvm_macros.svh"
 module MULT_top();
 
 MULT_interface multIF();

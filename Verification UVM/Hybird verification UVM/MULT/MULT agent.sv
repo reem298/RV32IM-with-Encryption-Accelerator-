@@ -17,6 +17,7 @@ class mult_agent extends uvm_agent;
 	mult_driver driver;
 	mult_sequencer sqr;
 	mult_monitor mon;
+	uvm_analysis_port #(mult_seq_item) agt_ap;
 
 //constructor
 function new (string name = "mult_agent", uvm_component parent = null);
@@ -32,6 +33,7 @@ function void build_phase (uvm_phase phase);
 			sqr 	= mult_sequencer::type_id::create("sqr", this);
 			driver 	= mult_driver::type_id::create("driver", this);
 			mon 	= mult_monitor::type_id::create("mon", this);
+			agt_ap 	= new("agt_ap", this);
 		endfunction : build_phase
 
 
@@ -41,6 +43,7 @@ function void connect_phase (uvm_phase phase);
 			driver.mult_driver_vif 	= mult_config_obj_agent.mult_config_vif;
 			mon.mult_monitor_vif 	= mult_config_obj_agent.mult_config_vif;
 			driver.seq_item_port.connect(sqr.seq_item_export);
+			mon.mon_ap.connect(agt_ap);
 endfunction : connect_phase
 
 endclass : mult_agent
