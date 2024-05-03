@@ -30,27 +30,21 @@ module ALU_Comparator_Testbench;
     // Wait for some time for stability
     #10;
 
-    // Test case 1: operand_A > operand_B
+    // Test case 1: directed test
     operand_A = 5;
     operand_B = 3;
     #10;
     $display("Test case 1: operand_A = %d, operand_B = %d", operand_A, operand_B);
     $display("Greater = %b, Equal = %b, Less = %b", Greater, Equal, Less);
 
-    // Test case 2: operand_A == operand_B
-    operand_A = -10;
-    operand_B = -10;
-    #10;
-    $display("Test case 2: operand_A = %d, operand_B = %d", operand_A, operand_B);
-    $display("Greater = %b, Equal = %b, Less = %b", Greater, Equal, Less);
-
-    // Test case 3: operand_A < operand_B
-    operand_A = -8;
-    operand_B = 2;
-    #10;
-    $display("Test case 3: operand_A = %d, operand_B = %d", operand_A, operand_B);
-    $display("Greater = %b, Equal = %b, Less = %b", Greater, Equal, Less);
-  end
-
+    // Test case 2: randomized test
+ 
+   repeat(1000)begin
+     operand_A=$random;
+     operand_B=$random;
+       #10;
+    $display("Test case 1: operand_A = %d, operand_B = %d", operand_A, operand_B);
+    $display("Greater = %b, Equal = %b, Less = %b", Greater, Equal, Less);  
+   end   
 
 endmodule

@@ -16,7 +16,7 @@ module ALU_Comparator #(parameter data_width = 32)
   always_comb begin
     Equal = (difference == 0);
     Greater = (difference[31] == 1);
-    Less = (difference[31] == 0) & !Equal;
+    Less = (difference[31] == 0) && !Equal;
   end
  endmodule   
 
