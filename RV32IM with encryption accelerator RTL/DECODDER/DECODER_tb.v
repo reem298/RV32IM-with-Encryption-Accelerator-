@@ -23,8 +23,8 @@ wire [ADDRESS_BITS-1:0] target_pc ;
 
 //outputs to controller 
 wire [6:0] op                     ;
-wire [2:0] funct3                 ; // it also output to pipline register
-wire [6:0] funct7                 ; // it also output to pipline register
+wire [2:0] funct3                 ;
+wire [6:0] funct7                 ;
 
 //output to GPRs 
 wire [4:0] read_sel1              ;
