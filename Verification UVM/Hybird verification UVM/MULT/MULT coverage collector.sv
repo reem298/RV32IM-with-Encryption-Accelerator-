@@ -23,7 +23,7 @@ MULT_O: coverpoint seq_item_cov.MULT_O;
 MULT_FINISH: coverpoint seq_item_cov.MULT_FINISH;
 //cross coverage
 cross FUCT3,MULT_O;
-cross FUCT3,MULT_FINISH;
+cross ENABLE_MULT,MULT_FINISH;
 
 endgroup : cg	
 

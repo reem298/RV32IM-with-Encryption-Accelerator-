@@ -8,7 +8,7 @@ module booth #(parameter length=32)(
   output logic signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth  // partial product
 );
   
-  wire [length:0] pos, neg, pos2, neg2, condition;
+  logic [length:0] pos, neg, pos2, neg2, condition;
   
   assign pos = {oper_a[length-1], oper_a};
   assign neg = ~{oper_a[length-1], oper_a} + 1;
@@ -16,8 +16,8 @@ module booth #(parameter length=32)(
   assign neg2 = {neg[length-1:0], 1'b0};
   assign condition = {oper_b, 1'b0};        //// put oper b in 33bit to apply radix 4 on it
   
-  reg [length:0] booth_o;  // booth output
-  reg [2:0] b;       //////////radix4 bits
+  logic [length:0] booth_o;  // booth output
+  logic [2:0] b;       //////////radix4 bits
   
   integer i;
    

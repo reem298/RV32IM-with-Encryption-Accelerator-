@@ -7,14 +7,14 @@ module mult_radix8 #(parameter length=32)(
   input logic signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth,
   input logic enable_mult,
   input logic fuct3,                          ////to know it's mul or mulh
-  output logic [length-1:0] mult_o,
+  output logic signed [length-1:0] mult_o,
   output logic  mult_finish);
   
   
-  wire [2*length-1:0]  partial_product1,partial_product2,partial_product3,partial_product4;
-  wire [2*length-1:0]  partial_product5,partial_product6,partial_product7,partial_product8;
-  wire [2*length-1:0]  partial_product9,partial_product10,partial_product11,partial_product12;
-  wire [2*length-1:0]  partial_product13,partial_product14,partial_product15,partial_product16;
+  logic [2*length-1:0]  partial_product1,partial_product2,partial_product3,partial_product4;
+  logic [2*length-1:0]  partial_product5,partial_product6,partial_product7,partial_product8;
+  logic [2*length-1:0]  partial_product9,partial_product10,partial_product11,partial_product12;
+  logic [2*length-1:0]  partial_product13,partial_product14,partial_product15,partial_product16;
   
    
   
@@ -36,10 +36,10 @@ module mult_radix8 #(parameter length=32)(
   assign partial_product15={{3{partial15_booth[length]}},partial15_booth,28'b0};
   assign partial_product16={{1{partial16_booth[length]}},partial16_booth,30'b0};
   
-  reg [length*2-1:0] sum;
-  reg [length*2-1:0] temp_sum;
+  logic [length*2-1:0] sum;
+  logic [length*2-1:0] temp_sum;
 
-  wire [length*2-1:0] sum_1;
+  logic [length*2-1:0] sum_1;
  
   assign sum_1=sum;
  

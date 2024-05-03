@@ -2,17 +2,18 @@
 //Author: reem ahmed
 //MULT TOP
 
-
+ 
 import MULT_config_obj::*;
 import MULT_driver::*;
 import MULT_env::*;
 import MULT_test::*;
 import uvm_pkg::*;
 `include "uvm_macros.svh"
-module MULT_top();
+module MULT_top(/*MULT_interface.TEST multIF */);
 
 MULT_interface multIF();
 mult_radix8_top DUT(multIF);
+
 	//assertions bind
 
 //interface handle in the config. databse & runnig test
