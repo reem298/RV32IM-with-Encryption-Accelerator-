@@ -323,7 +323,12 @@ alu_control   = 6'b101010 ;
                           end
                   end     
         default :begin
-                                         alu_control = 6'b101010 ;
+                                         wen           = 0         ;
+                                         mul_en        = 0         ;
+                                         mul_operation = 0         ;
+                                         div_en        = 0         ;
+                                         div_operation = 0         ;
+                                         alu_control   = 6'b101010 ;
                  end
       endcase
 end
