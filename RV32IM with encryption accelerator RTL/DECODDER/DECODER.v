@@ -35,18 +35,13 @@ output [4:0] read_sel1              ,
 output [4:0] read_sel2              ,
 output [4:0] write_sel              ,
 output reg   wen                    ,
+output reg   en                     ,
 
 //outputs to Pipeline Register
 output [31:0] imm32                 ,
 output [11:0] imm12                 , //*****
-output [ADDRESS_BITS-1:0] pc_o      ,
-
-//output to mult/div
-output reg mul_en , mul_operation   ,
-output reg div_en , div_operation   ,
- 
-//output to ALU
-output reg [5:0] alu_control              
+output [ADDRESS_BITS-1:0] pc_o      
+              
 );
 
 //op of the instruction
@@ -57,7 +52,6 @@ localparam [6:0] R_TYPE     = 7'b0110011,
                  JALR       = 7'b1100111,
                  jAL        = 7'b1101111, 
                  BRANCH     = 7'b1100011,
-                 CSR        = 7'B1110011,
                  ENCRYPTION = 7'b0001011;
                  
                 
@@ -123,212 +117,29 @@ assign target_pc = (op == 7'b1100011) && (branch) ? (pc + b_imm_ext[15:0]) : //b
                    (op == 7'b1101111 )            ? (pc + j_imm_ext[15:0]) : //jal instruction 
                    (op == 7'b1100111 )            ? JALR_target            : //jalr            
                    0;
-                   
-
-    
-             
-//control and output signal for most blocks
+                  
 always@(*)
 begin
-wen           = 0         ;
-mul_en        = 0         ;
-mul_operation = 0         ;
-div_en        = 0         ;
-div_operation = 0         ;
-alu_control   = 6'b101010 ;
+wen = 1  ;
+en  = 1  ;
       case(op)
-        R_TYPE:begin //R-TYPE
-                        wen       = 1     ;
-                        if(funct3==3'b000)
-                          begin
-                                if(funct7==7'b0000000)
-                                  begin 
-                                        alu_control = 6'b000000 ; // add
-                                  end
-                              else if(funct7==7'b0000001)         //mul
-                                  begin
-                                        mul_en       = 1          ;
-                                        mul_operation= 0          ;
-                                  end             
-                                else 
-                                  begin
-                                        alu_control = 6'b001000 ; // sub
-                                  end
-                        end
-                        
-                        else if (funct3==3'b001)
-                          begin
-                                if(funct7==7'b0000000)
-                                  begin 
-                                         alu_control = 6'b000001 ; // sll
-                                  end
-                                else                               //mulh
-                                  begin
-                                         
-                                        mul_en        = 1          ;
-                                        mul_operation = 1          ;
-                                  end
-                          end
-                            
-                        else if (funct3==3'b010)
-                            begin
-                                         alu_control = 6'b000010 ; // slt
-                            end
-                            
-                        else if (funct3==3'b100)
-                            begin
-                                if(funct7==7'b0000000)
-                                  begin 
-                                         alu_control = 6'b000100 ; // xor  
-                                  end
-                                else                               //div
-                                  begin
-                                         div_en       = 1        ;
-                                         div_operation= 1        ;
-                                  end
-                            end                      
-                          
-                        else if (funct3==3'b101)
-                          begin
-                                if(funct7==7'b0000000)
-                                  begin
-                                        alu_control = 6'b000101 ; // srl
-                                  end
-                                else
-                                  begin
-                                        alu_control = 6'b001101 ; // sra
-                                  end
-                          end
-                          
-                        else if (funct3==3'b110)
-                          begin
-                                if(funct7==7'b0000000)
-                                  begin
-                                        alu_control = 6'b000110 ; // or
-                                  end
-                                else                              //rem
-                                  begin
-                                        div_en       = 1        ;
-                                        div_operation= 0        ;
-                                  end    
-                                        
-                          end
-                          
-                        else if (funct3==3'b111)
-                          begin
-                                         alu_control = 6'b000111 ; // and
-                          end
-                          
-                        else
-                          begin
-                                         alu_control = 6'b100000 ; // ideal
-                          end
-                   end
-                   
-        I_TYPE:begin //I-TYPE
-                        wen       = 1 ;
-                        if (funct3==3'b000)
-                          begin 
-                                       alu_control = 6'b000000 ; // addi 
-                          end
-                          
-                        else if (funct3==3'b001 && funct7==7'b0000000)
-                          begin
-                                        alu_control = 6'b000001 ; // ssli
-                          end
-                         
-                        else if (funct3==3'b100)
-                          begin
-                                        alu_control = 6'b000100 ; // xori
-                          end
-                                       
-                        else if (funct3==3'b101)
-                          begin
-                                if(funct7==7'b0000000)
-                                  begin
-                                        alu_control = 6'b000101 ; // srli
-                                  end
-                                else
-                                  begin 
-                                        alu_control = 6'b001101 ; // srai
-                                  end
-                          end
-                          
-                        else if (funct3==3'b110)
-                          begin
-                                        alu_control = 6'b000110 ; // ori
-                          end
-                          
-                        else if (funct3==3'b111)
-                          begin
-                                        alu_control = 6'b000111 ; // andi
-                          end
-                          
-                        else
-                          begin
-                                        alu_control = 6'b100000 ; // ideal
-                          end
-                          
-                   end
-                   
-        Load:begin // LOAD
-                                        wen       = 1 ;      
-                                        alu_control = 6'b000000 ; // lw
-                  end
                   
-        STORE:begin // STORE
+        STORE:     begin 
                                         wen       = 0 ;
-                                        alu_control = 6'b000000 ; // sw
                    end
-                 
-        JALR:begin //Jump AND LINK REGISTER
-                                        wen       = 1 ;
-                                        alu_control = 6'b111111 ; // jalr
+              
+        BRANCH:    begin 
+                                        wen       = 0 ;
+                   end  
+                      
+        ENCRYPTION:begin
+                                        wen       = 0 ;
+                                        en        = 0 ;
                    end
-                                        
-        jAL:begin //Jump AND LINK
-                                        wen       = 1 ;
-                   end
-            
-        BRANCH:begin //BRANCH
-                                        wen= 0 ;
-                        if (funct3==3'b000)
-                          begin
-                                        alu_control = 6'b010000 ; // beq 
-                          end
-                          
-                        else if (funct3==3'b001)
-                          begin
-                                        alu_control = 6'b010001 ; // bne
-                          end
-                          
-                        else if (funct3==3'b100)
-                          begin
-                                        alu_control = 6'b000010 ; // blt
-                          end
-                            
-                        else if (funct3==3'b101)
-                          begin
-                                        alu_control = 6'b010101 ; // bge
-                          end
-                          
-                        else if (funct3==3'b110)
-                          begin
-                                        alu_control = 6'b010110 ; // bltu
-                          end
-                          
-                        else if (funct3==3'b111)
-                          begin
-                                        alu_control = 6'b010111 ; // bgeu
-                          end
-                  end     
+                   
         default :begin
-                                         wen           = 0         ;
-                                         mul_en        = 0         ;
-                                         mul_operation = 0         ;
-                                         div_en        = 0         ;
-                                         div_operation = 0         ;
-                                         alu_control   = 6'b101010 ;
+                                        wen       = 1 ;
+                                        en        = 1 ;
                  end
       endcase
 end
