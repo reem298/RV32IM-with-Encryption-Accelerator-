@@ -23,26 +23,20 @@ wire [ADDRESS_BITS-1:0] target_pc ;
 
 //outputs to controller 
 wire [6:0] op                     ;
-wire [2:0] funct3                 ;
-wire [6:0] funct7                 ;
+wire [2:0] funct3                 ; 
+wire [6:0] funct7                 ; 
 
 //output to GPRs 
 wire [4:0] read_sel1              ;
 wire [4:0] read_sel2              ;
 wire [4:0] write_sel              ;
 wire       wen                    ;
+wire       en                     ;
 
 //outputs to Pipeline Register
 wire [31:0] imm32                 ;
 wire [ADDRESS_BITS-1:0] pc_o      ;
 wire [11:0] imm12                 ;
-
-//output to mult/div
-wire mul_en , mul_operation       ;
-wire div_en , div_operation       ;
- 
-//output to ALU
-wire [5:0] alu_control            ;
 
 
                        /*
@@ -68,17 +62,12 @@ Decoder #(.ADDRESS_BITS(ADDRESS_BITS)) u1 (
 .read_sel2(read_sel2)     ,
 .write_sel(write_sel)     ,
 .wen(wen)                 ,
+.en(en)                   ,
 
 .imm32(imm32)             ,
 .pc_o(pc_o)               ,
-.imm12(imm12)             ,
+.imm12(imm12)             
 
-.mul_en(mul_en)           ,
-.mul_operation(mul_operation),
-.div_en(div_en)           ,
-.div_operation(div_operation),
-
-.alu_control(alu_control) 
 );
 
 /*
@@ -110,6 +99,10 @@ begin
   #20
   instruction = 32'h00000293; // addi x5, x0, 0 
   #20
+  instruction = 32'h0221A023; // sw x2, 0x20(x3)
+  #20
+  instruction = 32'h0041A20B; // enc
+  #20;
   $finish;
 end
 
