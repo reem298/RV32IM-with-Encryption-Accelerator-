@@ -59,11 +59,12 @@ wire [11:0] i_imm                   ; //original 12 bit of the i-type imm instru
 wire [31:0] i_imm_ext               ; //sign extend
 
 wire [4:0]  s_imm_lsb               ; //original lsb 5 bit of the s-type imm instruction
-wire [11:5] s_imm_msb               ; //original msb 7 bit of the s-type imm instruction 
+wire [6:0]  s_imm_msb               ; //original msb 7 bit of the s-type imm instruction 
+wire [11:0] s_imm                   ; //{s_imm_msb , s_imm_lsb}
 wire [31:0] s_imm_ext               ; //sign extend
 
-wire [4:1]  b_imm_lsb               ; //original lsb 5 bit of the b-type imm instruction
-wire [12:5] b_imm_msb               ; //original msb 8 bit of the s-type imm instruction 
+wire [3:0]  b_imm_lsb               ; //original lsb 4 bit of the b-type imm instruction
+wire [5:0]  b_imm_msb               ; //original msb  bit of the s-type imm instruction 
 wire [31:0] b_imm_ext               ; //sign extend
 
 wire [20:0] j_imm                   ; //original (19 bit + 1'b0) of the j-type imm instruction
@@ -80,23 +81,24 @@ assign read_sel2 = instruction[24:20]                 ;
 assign write_sel = instruction[11:7]                  ;
 
 //decoding the instructon
-assign op        = instruction[7:0]                   ;
+assign op        = instruction[6:0]                   ;
 assign funct3    = instruction[14:12]                 ;
 assign funct7    = instruction[31:25]                 ;
 
 //sign extend calculation
-assign i_imm     = instruction[11:0]                  ;
+assign i_imm     = instruction[31:20]                 ;
 assign i_imm_ext = {{20{i_imm[11]}} , i_imm }         ;
 
-assign s_imm_lsb = instruction[4:0]                   ;
-assign s_imm_msb = instruction[11:5]                  ;
-assign s_imm_ext = {{20{s_imm_msb[11]}} , s_imm_lsb } ;
+assign s_imm_lsb = instruction[11:7]                  ;
+assign s_imm_msb = instruction[31:25]                 ;
+assign s_imm     = {s_imm_msb , s_imm_lsb }           ;
+assign s_imm_ext = {{20{s_imm[11]}} , s_imm }     ;
 
-assign b_imm_lsb = instruction[4:1]                   ;
-assign b_imm_msb = instruction[12:5]                  ;
-assign b_imm_ext = {{20{instruction[31]}} ,instruction[7] , instruction[30:25] , instruction[11:8] , 1'b0 } ;
+assign b_imm_lsb = instruction[11:8]                  ;
+assign b_imm_msb = instruction[30:25]                 ;
+assign b_imm_ext = {{20{instruction[31]}} ,instruction[7] , b_imm_msb , b_imm_lsb , 1'b0 } ;
 
-assign j_imm     = {instruction[31] , instruction[19:12] , instruction[20] , instruction[30:21] , instruction[31] , 1'b0 } ;
+assign j_imm     = {instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0};
 assign j_imm_ext = {{11{j_imm[20]}} , j_imm }         ;
 
 assign shamt_imm = instruction[24:20]                 ;
