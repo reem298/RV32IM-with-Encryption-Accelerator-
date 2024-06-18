@@ -35,7 +35,6 @@ output [4:0] read_sel1              ,
 output [4:0] read_sel2              ,
 output [4:0] write_sel              ,
 output reg   wen                    ,
-output reg   en                     ,
 
 //outputs to Pipeline Register
 output [31:0] imm32                 ,
@@ -123,7 +122,6 @@ assign target_pc = (op == 7'b1100011) && (branch) ? (pc + b_imm_ext[15:0]) : //b
 always@(*)
 begin
 wen = 1  ;
-en  = 1  ;
       case(op)
                   
         STORE:     begin 
@@ -136,12 +134,10 @@ en  = 1  ;
                       
         ENCRYPTION:begin
                                         wen       = 0 ;
-                                        en        = 0 ;
                    end
                    
         default :begin
                                         wen       = 1 ;
-                                        en        = 1 ;
                  end
       endcase
 end
