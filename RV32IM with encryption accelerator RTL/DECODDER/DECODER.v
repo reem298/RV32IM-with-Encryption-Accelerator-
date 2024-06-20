@@ -111,6 +111,8 @@ assign imm32 = (op == 7'b0000011 ) ? i_imm_ext : //load instruction
                (op == 7'b0100011 ) ? s_imm_ext : //store instruction
                (op == 7'b1100011 ) ? b_imm_ext : //branch instruction
                (op == 7'b1101111 ) ? j_imm_ext : //jump and link instruction
+               (op == 7'b0010011 && funct3 == 3'b001)? shamt_imm_ext:  //SLLI
+				       (op == 7'b0010011 && funct3 == 3'b101)? shamt_imm_ext:  //SRLI , SRAI
                 0;
                
                
