@@ -16,11 +16,13 @@ bit divided_by_zero;
 bit signed [length-1:0] div_o;
 bit div_finish;
 
-/* constraints
-constraint funct3 { 
-fuct3 dist {0:=50, 1:=50};
-};
-*/
+
+constraint c1 {  
+oper_a inside {[-2**(length-1):(2**length-1)-1]};}
+
+constraint c2 { 
+oper_b inside {[-2**(length-1):(2**length-1)-1]}; }
+
 
 
 //consturctor

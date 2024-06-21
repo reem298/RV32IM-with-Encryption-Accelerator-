@@ -31,13 +31,13 @@ assign divIF.div_finish=div_finish;
    if(oper_a[length-1]&&oper_b[length-1])          //////if 2 input negative output s positve
      begin
      pos_output=1'b1;                        
-     dividend=~{oper_a}+1'b1;
-     divisor=~{oper_b}+1'b1;
+     dividend= (~{oper_a})+1'b1;
+     divisor= (~{oper_b})+1'b1;
    end
  else if(oper_a[length-1])          //////if 1 input negative output is negative
     begin
      pos_output=1'b0;
-     dividend=~{oper_a}+1'b1;
+     dividend= (~{oper_a})+1'b1;
      divisor=oper_b;
    end
  else if
@@ -45,7 +45,7 @@ assign divIF.div_finish=div_finish;
     begin
      pos_output=1'b0;
      dividend=oper_a;
-     divisor=~{oper_b}+1'b1;
+     divisor=(~{oper_b})+1'b1;
    end
  else           //////if 2 input postive output is postive
     begin

@@ -26,10 +26,10 @@ endfunction : build_phase
 //runphase
 task run_phase(uvm_phase phase);
 			super.run_phase(phase);
-			forever begin 
+			forever begin
 				#10;
 				rsp_seq_item = div_seq_item::type_id::create("rsp_seq_item");
-				rsp_seq_item.oper_a 	= div_monitor_vif.oper_b;
+				rsp_seq_item.oper_a 	= div_monitor_vif.oper_a;
 				rsp_seq_item.oper_b		= div_monitor_vif.oper_b;
 				rsp_seq_item.enable_div= div_monitor_vif.enable_div;
 				rsp_seq_item.fuct3 	    = div_monitor_vif.fuct3;

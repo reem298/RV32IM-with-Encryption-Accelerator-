@@ -44,7 +44,7 @@ task run_phase(uvm_phase phase);
 	  forever begin 
 		sb_fifo.get(seq_item_sb);
 		 ref_model(seq_item_sb);
-		 #1;
+		 
 			if(seq_item_sb.div_o !== div_o_ref) begin 
 				`uvm_error("run_phase", $sformatf("Comparison Failed, Transaction received by the DUT is: %s , While the Reference out is: 0h%0h, the Quotient is: 0h%0h, the Remainder is: 0h%0h ",
 						seq_item_sb.convert2string(), div_o_ref, Quotient, Remainder));

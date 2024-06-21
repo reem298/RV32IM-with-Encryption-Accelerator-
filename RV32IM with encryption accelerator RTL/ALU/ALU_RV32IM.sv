@@ -6,10 +6,10 @@ module ALU_RV32IM #(parameter data_width = 32)
   input  logic signed [data_width-1:0] operand_A,
   input  logic signed [data_width-1:0] operand_B,
   output logic signed [data_width-1:0] ALU_result,
-  //output logic is_equal,
-  //output logic is_greater,
   output logic is_less,
   output logic Branch_taken,
+  output logic signed [data_width-1:0] JALR_target,
+  output logic hold_pipeline,
   output logic zero,
   output logic carry,
   output logic overflow,
@@ -26,12 +26,10 @@ logic Greater,Equal,Less;
 ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater(Greater), .Equal(Equal), .Less(Less));
 
  always @(*) begin
-   //is_equal=Equal;
-  //is_greater=Greater;
- 	//is_less= Less;
+
   case(ALU_Control)
     // Addition and Subtraction
-    6'b000000: {carry, ALU_result}=operand_A + operand_B; // Add (LUI, AUIPC, ADDI, ADD)
+    6'b000000: {carry, ALU_result}=operand_A + operand_B; // Add (ADDI, ADD)
     6'b001000: {carry, ALU_result}=operand_A - operand_B; // Sub (SUB)
 
     // Logic Operations
@@ -42,36 +40,57 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
      // Shift Operations
      6'b000001: ALU_result=operand_A << operand_B; // Logical Shift Left (SLLI, SLL)
      6'b000101: ALU_result= operand_A >> operand_B; // Logical Shift Right (SRLI, SRL)
-	 6'b001101: ALU_result=operand_A >>> operand_B;// Arithmetic Shift Right (SRAI, SRA)
+	   6'b001101: ALU_result=operand_A >>> operand_B;// Arithmetic Shift Right (SRAI, SRA)
 
      // Signed Less Than (SLTI, SLT)
      6'b000010: begin
-      	if(Less)  is_less=1'b1; // Signed Less Than(SLT)
+      	if(Less)  is_less=1'b1; // Signed Less Than(SLTI,SLT)
       end
-
-
+     //Jump and link rigister (JALR)
+     6'b100111: begin 
+     JALR_target=operand_A + operand_B; //jalr_address = rs1 + imm;
+     hold_pipeline=1'b1;
+     end
      // Branch Operations (BEQ, BNE, BLT, BGE, BLTU)
      6'b010000: begin // BEQ
-     	if( Equal) Branch_taken=1'b1;
+     	if( Equal)begin
+      Branch_taken=1'b1;
+      hold_pipeline=1'b1;
+      end
      end
      6'b010001: begin // BNE
-        if (~Equal) Branch_taken=1'b1;
+      if (~Equal)begin
+        Branch_taken=1'b1;
+        hold_pipeline=1'b1;
+        end 
     end
 
     6'b10010: begin// BLT
-    	if(Less) Branch_taken=1'b1;
+    	if(Less)begin
+      Branch_taken=1'b1;
+      hold_pipeline=1'b1;
+      end 
     end
 
     6'b010101: begin // BGE
-    	if(Greater||Equal) Branch_taken=1'b1;
+    	if(Greater||Equal)begin
+      Branch_taken=1'b1;
+      hold_pipeline=1'b1; 
+      end
     end
     //unsined
     6'b010110:begin  // BLTU
-    	if(Less) Branch_taken=1'b1;
+    	if(Less) begin
+      Branch_taken=1'b1;
+      hold_pipeline=1'b1; 
+      end
     end
     
     6'b010111: begin // BGEU
-    if(Greater||Equal) Branch_taken=1'b1;
+    if(Greater||Equal) begin
+      Branch_taken=1'b1;
+      hold_pipeline=1'b1;
+    end
     end 
 
 	default: ALU_result= 1'b0; // Default Case
