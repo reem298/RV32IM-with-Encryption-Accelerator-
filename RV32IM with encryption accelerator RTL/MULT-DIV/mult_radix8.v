@@ -6,7 +6,7 @@ module mult_radix8 #(parameter length=32)(
   input wire signed [length:0] partial9_booth, partial10_booth, partial11_booth, partial12_booth,
   input wire signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth,
   input wire enable_mult,
-  input wire fuct3,                          ////to know it's mul or mulh
+  input wire operation,                          ////to know it's mul or mulh
   output reg [length-1:0] mult_o,
   output reg  mult_finish);
   
@@ -76,7 +76,7 @@ begin
 
    if(enable_mult)
       begin
-    if(!fuct3)            ///////instruction is mul
+    if(!operation)            ///////instruction is mul
       begin 
         mult_o=sum[length-1:0];
         mult_finish='b1;
