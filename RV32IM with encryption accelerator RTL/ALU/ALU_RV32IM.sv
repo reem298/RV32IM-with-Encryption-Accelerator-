@@ -11,7 +11,7 @@ module ALU_RV32IM #(parameter data_width = 32)
   output logic signed [data_width-1:0] JALR_target,
   output logic hold_pipeline,
   //output logic zero,
-  output logic carry,
+  //output logic carry,
   //output logic overflow,
   //output logic negative
 );
@@ -29,8 +29,8 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
   case(ALU_Control)
     // Addition and Subtraction
-    6'b000000: {carry, ALU_result}=operand_A + operand_B; // Add (lW,SW,ADDI, ADD)
-    6'b001000: {carry, ALU_result}=operand_A - operand_B; // Sub (SUB)
+    6'b000000:  ALU_result=operand_A + operand_B; // Add (lW,SW,ADDI, ADD)
+    6'b001000:  ALU_result=operand_A - operand_B; // Sub (SUB)
 
     // Logic Operations
     6'b000110:  ALU_result= operand_A | operand_B; // Or (OR, ORI)
