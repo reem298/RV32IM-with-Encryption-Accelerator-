@@ -1,6 +1,6 @@
 //ALU of RV32IM  TESTBENCH
 //Author: reem ahmed ali
-module ALU_RV32IM_tb;
+module ALU_tb;
   // Parameters
   parameter data_width = 32;
 
@@ -19,7 +19,7 @@ module ALU_RV32IM_tb;
 
 
 // Instantiation of ALU_RV32IM module
-  ALU_RV32IM #(data_width) dut (
+  ALU #(data_width) dut (
     .ALU_Control(ALU_Control),
     .operand_A(operand_A),
     .operand_B(operand_B),

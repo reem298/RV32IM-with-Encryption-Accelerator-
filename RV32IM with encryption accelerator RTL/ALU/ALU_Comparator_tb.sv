@@ -12,7 +12,7 @@ module ALU_Comparator_Testbench;
   logic Less;
 
   // Instantiate the ALU_Comparator module
-  ALU_Comparator #(data_width) uut(
+  ALU_Comparator #(data_width) dut(
     .operand_A(operand_A),
     .operand_B(operand_B),
     .Greater(Greater),

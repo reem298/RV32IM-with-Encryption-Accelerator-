@@ -1,6 +1,6 @@
 //ALU of RV32IM 
 //Author: reem ahmed ali
-module ALU_RV32IM #(parameter data_width = 32)
+module ALU #(parameter data_width = 32)
 (
   input  logic [5:0] ALU_Control,
   input  logic signed [data_width-1:0] operand_A,
