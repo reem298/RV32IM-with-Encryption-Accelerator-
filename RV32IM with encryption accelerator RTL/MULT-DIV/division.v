@@ -1,6 +1,6 @@
 module division #(parameter length=32)(
  input wire signed [length-1:0] oper_a,oper_b,
- input wire fuct3,enable_div,
+ input wire operation,enable_div,
  output reg divided_by_zero,
  output reg [length-1:0] div_o,
  output reg div_finish);
@@ -69,19 +69,19 @@ module division #(parameter length=32)(
          div_finish='b1;
          div_o='b0;
        end
-   else if (fuct3&&pos_output)              ///////instruction is div result pos
+   else if (operation&&pos_output)              ///////instruction is div result pos
      begin
          divided_by_zero='b0;
          div_o=AQ[length-1:0];
          div_finish='b1;
        end
-     else if(fuct3&&!pos_output)        ////instruction is div result neg
+     else if(operation&&!pos_output)        ////instruction is div result neg
         begin
          divided_by_zero='b0;
          div_o=~AQ[length-1:0]+1;
          div_finish='b1;
        end
-        else if(!fuct3&&pos_output)       ///////instruction is rem result is pos
+        else if(!operation&&pos_output)       ///////instruction is rem result is pos
         begin
          divided_by_zero='b0;
          div_o=AQ[2*length-1:length];

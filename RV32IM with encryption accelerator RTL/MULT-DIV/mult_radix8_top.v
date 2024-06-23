@@ -1,8 +1,8 @@
 module mult_radix8_top #(parameter length=32)(
-  input wire [length-1:0] OPER_A,OPER_B,
-  input wire  ENABLE_MULT,FUCT3,
-  output wire [length-1:0] MULT_O,
-  output wire  MULT_FINISH);
+  input wire [length-1:0] oper_a,oper_b,
+  input wire  enable_mult,operation,
+  output wire [length-1:0] mult_o,
+  output wire  mult_finish);
   
   
   wire  [length:0] partial1_booth, partial2_booth, partial3_booth, partial4_booth;
@@ -16,9 +16,9 @@ module mult_radix8_top #(parameter length=32)(
   
   
   booth b1 (
-  .oper_a(OPER_A),
-  .oper_b(OPER_B),
-  .enable_mult(ENABLE_MULT),
+  .oper_a(oper_a),
+  .oper_b(oper_b),
+  .enable_mult(enable_mult),
   .partial1_booth(partial1_booth),
   .partial2_booth(partial2_booth),
   .partial3_booth(partial3_booth),
@@ -56,9 +56,9 @@ module mult_radix8_top #(parameter length=32)(
   .partial15_booth(partial15_booth),
   .partial16_booth(partial16_booth),
   .enable_mult(ENABLE_MULT),
-  .fuct3(FUCT3),
-  .mult_o(MULT_O),
-  .mult_finish(MULT_FINISH));
+  .operation(operation),
+  .mult_o(mult_o),
+  .mult_finish(mult_finish));
   
   
 endmodule
