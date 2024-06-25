@@ -136,7 +136,6 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
       Branch_taken=1'b0;
       hold_pipeline=1'b0;
     end 
-  end
 
 	default: 
 	begin
