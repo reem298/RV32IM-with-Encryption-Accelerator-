@@ -10,7 +10,7 @@ module ALU #(parameter data_width = 32)
   output logic Branch_taken,
   output logic signed [data_width-1:0] JALR_target,
   output logic hold_pipeline,
-  //output logic zero,
+  output logic zero
   //output logic carry,
   //output logic overflow,
   //output logic negative
@@ -26,6 +26,12 @@ logic Greater,Equal,Less;
 ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater(Greater), .Equal(Equal), .Less(Less));
 
  always @(*) begin
+ ALU_result=32'b0;
+ is_less=1'b0;
+ Branch_taken=1'b0;
+ JALR_target=32'b0;
+ hold_pipeline=1'b0;
+ zero=1'b0;
 
   case(ALU_Control)
     // Addition and Subtraction
@@ -45,6 +51,8 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
      // Signed Less Than (SLTI, SLT)
      6'b000010: begin
       	if(Less)  is_less=1'b1; // Signed Less Than(SLTI,SLT)
+        else
+          is_less=1'b0;
       end
      //Jump and link rigister (JALR)
      6'b100111: begin 
@@ -62,42 +70,62 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
      // Branch Operations (BEQ, BNE, BLT, BGE, BLTU)
      6'b010000: begin // BEQ
-     	if( Equal)begin
+     	if(Equal)begin
       Branch_taken=1'b1;
+      zero=1'b1;
       end
+      else Branch_taken=1'b0;
      end
+
      6'b010001: begin // BNE
       if (~Equal)begin
         Branch_taken=1'b1;
         end 
+     else Branch_taken=1'b0;
     end
 
     6'b10010: begin// BLT
     	if(Less)begin
       Branch_taken=1'b1;
       end 
+     else Branch_taken=1'b0;
     end
 
     6'b010101: begin // BGE
     	if(Greater||Equal)begin
       Branch_taken=1'b1;
-      hold_pipeline=1'b1; 
+      //zero flag for eqaul condition
+      if (Equal) begin
+         zero=1'b1;
+       end 
+       else zero=1'b0;
       end
+      //not greater not eqaul
+      else Branch_taken=1'b0;
     end
+
     //unsined
     6'b010110:begin  // BLTU
     	if(Less) begin
       Branch_taken=1'b1;
       end
+      else Branch_taken=1'b0;
     end
     
     6'b010111: begin // BGEU
     if(Greater||Equal) begin
       Branch_taken=1'b1;
+     //zero flag for eqaul condition
+      if (Equal) begin
+         zero=1'b1;
+       end 
+       else zero=1'b0;
     end
+   //not greater not eqaul
+    else Branch_taken=1'b0;
     end 
 
-	default: ALU_result= 1'b0; // Default Case
+	default: ALU_result= 32'b0;  Branch_taken=1'b0; hold_pipeline=1'b0; zero=1'b0;// Default Case
    endcase
 
 //hold_pipeline signal(branch instructions)
@@ -111,7 +139,7 @@ end
 end
 
 // Flags( zero,overflow,negative)
-// assign zero = ~(|ALU_result); //ALU_result is zero
+assign zero = ~(|ALU_result); //ALU_result is zero
 //assign overflow = ({carry, ALU_result[data_width-1]} == 2'b01); 
 //assign negative = (ALU_result[data_width-1] == 1 && (ALU_Control == 6'b001000)); //last bit is one and subtraction is performed
 
