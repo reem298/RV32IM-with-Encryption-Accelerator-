@@ -5,25 +5,25 @@ module booth #(parameter length=32)(
   output reg signed [length:0] partial1_booth, partial2_booth, partial3_booth, partial4_booth,
   output reg signed [length:0] partial5_booth, partial6_booth, partial7_booth, partial8_booth,   
   output reg signed [length:0] partial9_booth, partial10_booth, partial11_booth, partial12_booth,
-  output reg signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth  // partial product
+  output reg signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth  // partial product (every 2 bits * oper_a) produces 33_bit
 );
   
   wire [length:0] pos, neg, pos2, neg2, condition;
   
-  assign pos = {oper_a[length-1], oper_a};
-  assign neg = ~{oper_a[length-1], oper_a} + 1;
-  assign pos2 = {pos[length-1:0], 1'b0};
-  assign neg2 = {neg[length-1:0], 1'b0};
-  assign condition = {oper_b, 1'b0};        //// put oper b in 33bit to apply radix 4 on it
+  assign pos = {oper_a[length-1], oper_a};       // positive number by adding 0_bit to MSB  (1*multiplication in input a)
+  assign neg = ~{oper_a[length-1], oper_a} + 1;  // 2's complement (-ve number)  (-1*multiplication in input a)
+  assign pos2 = {pos[length-1:0], 1'b0};     // multiplication by 2   (2 * multiplication in input a)
+  assign neg2 = {neg[length-1:0], 1'b0};     // multiplication by 2   (-2 * multiplication in input a)
+  assign condition = {oper_b, 1'b0};        //// put oper b in 33bit to apply radix 4 on it 
   
   reg [length:0] booth_o;  // booth output
-  reg [2:0] b;       //////////radix4 bits
+  reg [2:0] b;       //////////radix4 bits (takes 3-bits from oper_b then * oper_b) produces 33_bit relative to a given truth table
   
   integer i;
    
   always @(*)
   begin
-     partial1_booth = 'b0;
+     partial1_booth = 'b0; // initial to zero
      partial2_booth = 'b0;
      partial3_booth = 'b0;
      partial4_booth = 'b0;
@@ -40,20 +40,20 @@ module booth #(parameter length=32)(
      partial15_booth = 'b0;
      partial16_booth = 'b0;
      
-     if(enable_mult)                 
+        if(enable_mult)        // check multiplication operation         
        begin
     for (i = 1; i < 32; i = i + 2)
     begin
       b = {condition[i+1], condition[i], condition[i-1]};     /// radix4 bits
       case (b)
-        'b000: booth_o = 0;
-        'b001: booth_o = pos;
-        'b010: booth_o = pos;
-        'b011: booth_o = pos2;
-        'b100: booth_o = neg2;
-        'b101: booth_o = neg;
-        'b110: booth_o = neg;
-        'b111: booth_o = 0;
+        'b000: booth_o = 0;           // 000 --->  0 * oper_a
+        'b001: booth_o = pos;         // 001 --->  1 * oper_a
+        'b010: booth_o = pos;         // 010 --->  1 * oper_a
+        'b011: booth_o = pos2;        // 011 --->  2 * oper_a
+        'b100: booth_o = neg2;        // 100 --->  -2 * oper_a
+        'b101: booth_o = neg;         // 101 --->  -1 * oper_a
+        'b110: booth_o = neg;         // 110 --->  -1 * oper_a
+        'b111: booth_o = 0;           // 111 --->  -0 * oper_a
         default: booth_o = 0;
       endcase 
       case (i)                // Assign booth_o to  make partial product register
