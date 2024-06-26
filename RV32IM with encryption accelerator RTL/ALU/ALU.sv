@@ -6,7 +6,7 @@ module ALU #(parameter data_width = 32)
   input  logic signed [data_width-1:0] operand_A,
   input  logic signed [data_width-1:0] operand_B,
   output logic signed [data_width-1:0] ALU_result,
-  output logic is_less,
+  output logic [data_width-1:0] is_less,
   output logic Branch_taken,
   output logic signed [data_width-1:0] JALR_target,
   output logic hold_pipeline,
@@ -27,7 +27,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
  always @(*) begin
  ALU_result=32'b0;
- is_less=1'b0;
+ is_less=32'b0;
  Branch_taken=1'b0;
  JALR_target=32'b0;
  hold_pipeline=1'b0;
@@ -46,13 +46,13 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
      // Shift Operations
      6'b000001: ALU_result=operand_A << operand_B; // Logical Shift Left (SLLI, SLL)
      6'b000101: ALU_result= operand_A >> operand_B; // Logical Shift Right (SRLI, SRL)
-	   6'b001101: ALU_result=operand_A >>> operand_B;// Arithmetic Shift Right (SRAI, SRA)
+     6'b001101: ALU_result=operand_A >>> operand_B;// Arithmetic Shift Right (SRAI, SRA)
 
      // Signed Less Than (SLTI, SLT)
      6'b000010: begin
-      	if(Less)  is_less=1'b1; // Signed Less Than(SLTI,SLT)
+        if(Less)  is_less=32'b1; // Signed Less Than(SLTI,SLT)
         else
-          is_less=1'b0;
+          is_less=32'b0;
       end
      //Jump and link rigister (JALR)
      6'b100111: begin 
@@ -61,7 +61,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
      // Branch Operations (BEQ, BNE, BLT, BGE, BLTU)
      6'b010000: begin // BEQ
-     	if(Equal)begin
+      if(Equal)begin
       Branch_taken=1'b1;
       zero=1'b1;
       end
@@ -76,7 +76,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
     end
 
     6'b10010: begin// BLT
-    	if(Less)begin
+      if(Less)begin
       Branch_taken=1'b1;
       end 
      else Branch_taken=1'b0;
@@ -105,7 +105,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
     //unsined
     6'b010110:begin  // BLTU
-    	if(Less) begin
+      if(Less) begin
       Branch_taken=1'b1;
       end
       else Branch_taken=1'b0;
@@ -132,7 +132,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
       endcase
     end
 
-	default:begin
+  default:begin
    ALU_result= 32'b0;  Branch_taken=1'b0; hold_pipeline=1'b0; zero=1'b0;// Default Case
  end
   endcase
