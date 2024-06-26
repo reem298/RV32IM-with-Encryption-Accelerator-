@@ -12,10 +12,12 @@ module ALU_tb;
   //logic is_greater,
   logic is_less;
   logic Branch_taken;
+  logic signed [data_width-1:0] JALR_target;
+  logic hold_pipeline;
   logic zero;
-  logic carry;
-  logic overflow;
-  logic negative;
+  //logic carry;
+  //logic overflow;
+  //logic negative;
 
 
 // Instantiation of ALU_RV32IM module
@@ -28,10 +30,12 @@ module ALU_tb;
     //.is_greater(is_greater),
     .is_less(is_less),
     .Branch_taken(Branch_taken),
-    .zero(zero),
-    .carry(carry),
-    .overflow(overflow),
-    .negative(negative)
+    .JALR_target(JALR_target),
+    .hold_pipeline(hold_pipeline),
+    .zero(zero)
+   // .carry(carry),
+    //.overflow(overflow),
+    //.negative(negative)
   );
   
 
@@ -48,9 +52,9 @@ initial begin
     // Display the outputs
     $display("ALU Result: %d", ALU_result);
     $display("Zero: %b", zero);
-    $display("Carry: %b", carry);
-    $display("Overflow: %b", overflow);
-    $display("Negative: %b", negative);
+    //$display("Carry: %b", carry);
+    //$display("Overflow: %b", overflow);
+    //$display("Negative: %b", negative);
 
 // Test case 2: Subtraction (randomized)
     ALU_Control = 6'b001000; // Sub
@@ -62,9 +66,9 @@ initial begin
     // Display the outputs
     $display("Subtraction: %d - %d = %d", operand_A, operand_B, ALU_result);
     $display("Zero: %b", zero);
-    $display("Carry: %b", carry);
-    $display("Overflow: %b", overflow);
-    $display("Negative: %b", negative);
+   // $display("Carry: %b", carry);
+    //$display("Overflow: %b", overflow);
+    //$display("Negative: %b", negative);
 
 // Test case 3: XOR
     ALU_Control = 6'b000100; 
@@ -117,7 +121,54 @@ operand_B = $random;
 #10;
   $display("Branch_taken %d", Branch_taken);
 
-end
+//random cases 
+ALU_Control= $random;
+operand_A = $random;
+operand_B = $random;
+#10;
+// Display the outputs
+    $display("ALU_Control: %d", ALU_Control);
+    $display("operand_A: %d", operand_A);
+    $display("operand_B: %d", operand_B);
+    $display("ALU_result: %d", ALU_result);
+    $display("Zero: %b", zero);
+    $display("Branch_taken %d", Branch_taken);
+    $display("JALR_target %d", JALR_target);
+    $display("hold_pipeline %d", hold_pipeline);
 
+
+//random cases 
+ALU_Control= $random;
+operand_A = $random;
+operand_B = $random;
+#10;
+// Display the outputs
+    $display("ALU_Control: %d", ALU_Control);
+    $display("operand_A: %d", operand_A);
+    $display("operand_B: %d", operand_B);
+    $display("ALU_result: %d", ALU_result);
+    $display("Zero: %b", zero);
+    $display("Branch_taken %d", Branch_taken);
+    $display("JALR_target %d", JALR_target);
+    $display("hold_pipeline %d", hold_pipeline);
+
+
+//random cases 
+ALU_Control= $random;
+operand_A = $random;
+operand_B = $random;
+#10;
+// Display the outputs
+    $display("ALU_Control: %d", ALU_Control);
+    $display("operand_A: %d", operand_A);
+    $display("operand_B: %d", operand_B);
+    $display("ALU_result: %d", ALU_result);
+    $display("Zero: %b", zero);
+    $display("Branch_taken %d", Branch_taken);
+    $display("JALR_target %d", JALR_target);
+    $display("hold_pipeline %d", hold_pipeline);
+
+
+end
 
   endmodule
