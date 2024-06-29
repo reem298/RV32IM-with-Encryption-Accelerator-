@@ -27,15 +27,13 @@ endfunction : build_phase
 task run_phase(uvm_phase phase);
 			super.run_phase(phase);
 			forever begin
-				#10;
+				@(negedge div_monitor_vif.clk);
 				rsp_seq_item = div_seq_item::type_id::create("rsp_seq_item");
 				rsp_seq_item.oper_a 	= div_monitor_vif.oper_a;
 				rsp_seq_item.oper_b		= div_monitor_vif.oper_b;
 				rsp_seq_item.enable_div= div_monitor_vif.enable_div;
-				rsp_seq_item.fuct3 	    = div_monitor_vif.fuct3;
-				rsp_seq_item.divided_by_zero 	= div_monitor_vif.divided_by_zero;
+				rsp_seq_item.operation 	    = div_monitor_vif.operation;
 				rsp_seq_item.div_o= div_monitor_vif.div_o;
-				rsp_seq_item.div_finish= div_monitor_vif.div_finish;
 				mon_ap.write(rsp_seq_item);
 				`uvm_info("run_phase", rsp_seq_item.convert2string(), UVM_HIGH)
 			end

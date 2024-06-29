@@ -27,14 +27,13 @@ endfunction : build_phase
 task run_phase(uvm_phase phase);
 			super.run_phase(phase);
 			forever begin 
-				#10;
+				@(negedge mult_monitor_vif.clk);
 				rsp_seq_item = mult_seq_item::type_id::create("rsp_seq_item");
-				rsp_seq_item.OPER_A 	= mult_monitor_vif.OPER_A;
-				rsp_seq_item.OPER_B		= mult_monitor_vif.OPER_B;
-				rsp_seq_item.ENABLE_MULT= mult_monitor_vif.ENABLE_MULT;
-				rsp_seq_item.FUCT3 	    = mult_monitor_vif.FUCT3;
-				rsp_seq_item.MULT_O 	= mult_monitor_vif.MULT_O;
-				rsp_seq_item.MULT_FINISH= mult_monitor_vif.MULT_FINISH;
+				rsp_seq_item.oper_a 	= mult_monitor_vif.oper_a;
+				rsp_seq_item.oper_b		= mult_monitor_vif.oper_b;
+				rsp_seq_item.enable_mult= mult_monitor_vif.enable_mult;
+				rsp_seq_item.operation 	    = mult_monitor_vif.operation;
+				rsp_seq_item.mult_o 	= mult_monitor_vif.mult_o;
 				mon_ap.write(rsp_seq_item);
 				`uvm_info("run_phase", rsp_seq_item.convert2string(), UVM_HIGH)
 			end

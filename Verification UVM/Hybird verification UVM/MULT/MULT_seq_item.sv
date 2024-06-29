@@ -10,14 +10,14 @@ class mult_seq_item extends uvm_sequence_item;
 `uvm_object_utils(mult_seq_item)
 
 parameter length =32;
-rand bit signed [length-1:0] OPER_A,OPER_B;
-rand bit signed ENABLE_MULT,FUCT3;
-bit signed [length-1:0] MULT_O;
-bit  MULT_FINISH;
+rand logic signed [length-1:0] oper_a,oper_b;
+rand logic signed enable_mult,operation;
+logic signed [length-1:0] mult_o;
+
 
 //constraints
 /*constraint funct3 { 
-FUCT3 dist {0:=50, 1:=50};
+operation dist {0:=50, 1:=50};
 }; */
 
 
@@ -27,11 +27,11 @@ function new (string name = "mult_seq_item");
 endfunction
 
 function string convert2string();
-	return $sformatf("%s OPER_A = 0h%0h, OPER_B = 0h%0h, ENABLE_MULT = 0h%0h, FUCT3= 0h%0h, MULT_O=0h%0h", super.convert2string, OPER_A, OPER_B, ENABLE_MULT,FUCT3,MULT_O);
+	return $sformatf("%s oper_a = 0h%0h, oper_b = 0h%0h, enable_mult = 0h%0h, operation= 0h%0h, mult_o=0h%0h", super.convert2string, oper_a, oper_b, enable_mult,operation,mult_o);
 endfunction : convert2string
 
 function string convert2string_stimulus();
-			return $sformatf(" OPER_A = 0h%0h, OPER_B = 0h%0h, ENABLE_MULT =0h%0h, FUCT3= 0h%0h,MULT_O=0h%0h", OPER_A, OPER_B, ENABLE_MULT,FUCT3,MULT_O);
+			return $sformatf(" oper_a = 0h%0h, oper_b = 0h%0h, enable_mult =0h%0h, operation= 0h%0h,mult_o=0h%0h", oper_a, oper_b, enable_mult,operation,mult_o);
 endfunction : convert2string_stimulus
 
 endclass : mult_seq_item	

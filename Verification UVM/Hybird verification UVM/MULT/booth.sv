@@ -5,19 +5,19 @@ module booth #(parameter length=32)(
   output logic signed [length:0] partial1_booth, partial2_booth, partial3_booth, partial4_booth,
   output logic signed [length:0] partial5_booth, partial6_booth, partial7_booth, partial8_booth,   
   output logic signed [length:0] partial9_booth, partial10_booth, partial11_booth, partial12_booth,
-  output logic signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth  // partial product
+  output logic signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth  // partial product (every 2 bits * oper_a) produces 33_bit
 );
   
   logic [length:0] pos, neg, pos2, neg2, condition;
   
-  assign pos = {oper_a[length-1], oper_a};
-  assign neg = ~{oper_a[length-1], oper_a} + 1;
-  assign pos2 = {pos[length-1:0], 1'b0};
-  assign neg2 = {neg[length-1:0], 1'b0};
-  assign condition = {oper_b, 1'b0};        //// put oper b in 33bit to apply radix 4 on it
+ assign pos = {oper_a[length-1], oper_a};       // positive number by adding 0_bit to MSB  (1*multiplication in input a)
+  assign neg = ~{oper_a[length-1], oper_a} + 1;  // 2's complement (-ve number)  (-1*multiplication in input a)
+  assign pos2 = {pos[length-1:0], 1'b0};     // multiplication by 2   (2 * multiplication in input a)
+  assign neg2 = {neg[length-1:0], 1'b0};     // multiplication by 2   (-2 * multiplication in input a)
+  assign condition = {oper_b, 1'b0};        //// put oper b in 33bit to apply radix 4 on it 
   
   logic [length:0] booth_o;  // booth output
-  logic [2:0] b;       //////////radix4 bits
+  logic [2:0] b;       //////////radix4 bits (takes 3-bits from oper_b then * oper_b) produces 33_bit relative to a given truth table
   
   integer i;
    

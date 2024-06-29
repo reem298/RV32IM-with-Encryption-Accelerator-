@@ -26,8 +26,8 @@ task run_phase(uvm_phase phase);
 		div_driver_vif.oper_a = stim_seq_item.oper_a;
 		div_driver_vif.oper_b = stim_seq_item.oper_b;; 	
 		div_driver_vif. enable_div = stim_seq_item.enable_div; 
-		div_driver_vif.fuct3 = stim_seq_item.fuct3; 
-		#10;
+		div_driver_vif.operation = stim_seq_item.operation; 
+		@(negedge div_driver_vif.clk);
 		seq_item_port.item_done();
 		`uvm_info("run_phase", stim_seq_item.convert2string_stimulus(), UVM_HIGH)
 		end

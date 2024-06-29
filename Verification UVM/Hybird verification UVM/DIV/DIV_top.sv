@@ -10,8 +10,15 @@ import DIV_env::*;
 import DIV_test::*;
 import uvm_pkg::*;
 module DIV_top();
+	bit clk;
 
-DIV_interface divIF();
+	/* Clock Generation */
+	initial begin 
+		clk = 0;
+		forever 
+			#1 clk = ~clk;
+	end
+DIV_interface divIF(clk);
 division DUT(divIF);
 	//assertions bind
 

@@ -6,12 +6,12 @@ module mult_radix8 #(parameter length=32)(
   input logic signed [length:0] partial9_booth, partial10_booth, partial11_booth, partial12_booth,
   input logic signed [length:0] partial13_booth, partial14_booth, partial15_booth, partial16_booth,
   input logic enable_mult,
-  input logic fuct3,                          ////to know it's mul or mulh
+  input logic operation,                          ////to know it's mul or mulh
   output logic signed [length-1:0] mult_o,
   output logic  mult_finish);
   
   
-  logic [2*length-1:0]  partial_product1,partial_product2,partial_product3,partial_product4;
+  logic [2*length-1:0]  partial_product1,partial_product2,partial_product3,partial_product4; // define 64_bit 
   logic [2*length-1:0]  partial_product5,partial_product6,partial_product7,partial_product8;
   logic [2*length-1:0]  partial_product9,partial_product10,partial_product11,partial_product12;
   logic [2*length-1:0]  partial_product13,partial_product14,partial_product15,partial_product16;
@@ -19,8 +19,8 @@ module mult_radix8 #(parameter length=32)(
    
   
   
-  assign partial_product1={{31{partial1_booth[length]}},partial1_booth};
-  assign partial_product2={{29{partial2_booth[length]}},partial2_booth,2'b0};
+  assign partial_product1={{31{partial1_booth[length]}},partial1_booth};        // { copy MSB of partial1_booth 33 --> 63 , partial1_booth 0-->32}
+  assign partial_product2={{29{partial2_booth[length]}},partial2_booth,2'b0};   // { copy MSB of partial1_booth 35 --> 63 , partial1_booth 0-->32}
   assign partial_product3={{27{partial3_booth[length]}},partial3_booth,4'b0};
   assign partial_product4={{25{partial4_booth[length]}},partial4_booth,6'b0};
   assign partial_product5={{23{partial5_booth[length]}},partial5_booth,8'b0};
@@ -35,7 +35,6 @@ module mult_radix8 #(parameter length=32)(
   assign partial_product14={{5{partial14_booth[length]}},partial14_booth,26'b0};
   assign partial_product15={{3{partial15_booth[length]}},partial15_booth,28'b0};
   assign partial_product16={{1{partial16_booth[length]}},partial16_booth,30'b0};
-  
   logic [length*2-1:0] sum;
   logic [length*2-1:0] temp_sum;
 
@@ -53,7 +52,7 @@ begin
   for (i=0 ;i<16;i=i+1)
   begin
     case(i)
-      'd0 : sum=temp_sum+partial_product1;
+      'd0 : sum=temp_sum+partial_product1;  
       'd1 : sum=temp_sum+partial_product2;
       'd2 : sum=temp_sum+partial_product3;
       'd3 : sum=temp_sum+partial_product4;
@@ -76,22 +75,28 @@ begin
 
    if(enable_mult)
       begin
-    if(!fuct3)            ///////instruction is mul
+    if(!operation)            ///////instruction is mul
       begin 
         mult_o=sum[length-1:0];
-        mult_finish='b1;
+     //   mult_finish='b1;
       end
-    else           /////////////////instruction is mulh
-      begin
+    else if (sum[2*length-1] )
+          begin
+            sum= sum+ 'b100000000000000000000000000000000;
         mult_o=sum[2*length-1:length];
-        mult_finish='b1;
+      //  mult_finish='b1;
         
+      end
+    else
+      begin
+       mult_o=sum[2*length-1:length];
+      //  mult_finish='b1;
       end
     end
     else
        begin
         mult_o='b0;
-        mult_finish='b0;
+      //  mult_finish='b0;
         
       end
       

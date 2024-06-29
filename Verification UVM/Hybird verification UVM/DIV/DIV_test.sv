@@ -16,7 +16,8 @@ class div_test extends uvm_test;
   div_config_obj div_config_obj_test;
   div_env env;
   div_agent agt;
-  div_sequence seq;
+  div_main_sequence main_seq;
+  div_enable_sequence enable_seq;
   virtual DIV_interface div_test_vif;
 
 //constructor 
@@ -30,7 +31,9 @@ function void build_phase (uvm_phase phase);
 	env = div_env::type_id::create("env", this);
 	agt = div_agent::type_id::create("agt", this);
 	div_config_obj_test = div_config_obj::type_id::create("div_config_obj_test", this);
-	seq= div_sequence::type_id::create("seq", this);
+	main_seq= div_main_sequence::type_id::create("main_seq", this);
+	enable_seq=div_enable_sequence::type_id::create("enable_seq", this);
+
 if(!uvm_config_db#(virtual DIV_interface)::get(this, "", "DIV_INTERFACE", div_config_obj_test.div_config_vif))
 	`uvm_fatal("build_phase", "TEST - Unable to Get the Virtual Interface from the config_db");
 
@@ -42,9 +45,14 @@ task run_phase(uvm_phase phase);
 	super.run_phase(phase);
 	phase.raise_objection(this);
 
-	`uvm_info("run_phase", "SEQUENCE ASSERTED", UVM_NONE);
-	seq.start(env.agt.sqr);
-	`uvm_info("run_phase", "SEQUENCE DE-ASSERTED", UVM_NONE);
+	`uvm_info("run_phase", "Stimulus Gen. Started", UVM_NONE);
+	main_seq.start(env.agt.sqr);
+	`uvm_info("run_phase", "Stimulus Gen. Ended", UVM_NONE);
+
+   `uvm_info("run_phase", "Enable ASSERTED", UVM_NONE);
+    enable_seq.start(env.agt.sqr);
+    `uvm_info("run_phase", "Enable DE-ASSERTED", UVM_NONE);
+
 
 	phase.drop_objection(this);
 endtask : run_phase

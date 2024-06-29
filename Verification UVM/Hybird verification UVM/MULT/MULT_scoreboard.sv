@@ -14,9 +14,8 @@ uvm_tlm_analysis_fifo #(mult_seq_item) sb_fifo;
 
 mult_seq_item seq_item_sb;
 parameter length =32;
-logic signed [length-1:0] MULT_O_REF;
-logic MULT_FINISH_REF;
-logic signed[63:0] RESULT;
+logic signed [length-1:0] mult_o_ref;
+logic signed[63:0] result;
 int error_count = 0, correct_count = 0;
 
 //constructor 
@@ -44,9 +43,9 @@ task run_phase(uvm_phase phase);
 		sb_fifo.get(seq_item_sb);
 		 ref_model(seq_item_sb);
 		 #1;
-			if(seq_item_sb.MULT_O !== MULT_O_REF) begin 
+			if(seq_item_sb.mult_o !== mult_o_ref) begin 
 				`uvm_error("run_phase", $sformatf("Comparison Failed, Transaction received by the DUT is: %s , While the Reference out is: 0h%0h, the total result is: 0h%0h",
-						seq_item_sb.convert2string(), MULT_O_REF, RESULT));
+						seq_item_sb.convert2string(), mult_o_ref, result));
 					error_count++;
 			end
 			else begin 
@@ -57,17 +56,17 @@ task run_phase(uvm_phase phase);
 endtask : run_phase
 
 task ref_model(mult_seq_item seq_item_chk);
-	if(seq_item_chk.ENABLE_MULT) begin
-		RESULT = seq_item_chk.OPER_A * seq_item_chk.OPER_B;
-		if(!seq_item_chk.FUCT3) begin
+	if(seq_item_chk.enable_mult) begin
+		result = seq_item_chk.oper_a * seq_item_chk.oper_b;
+		if(!seq_item_chk.operation) begin
 			// instruction is mul (multiply LSB)
-			MULT_O_REF = RESULT[31:0];
+			mult_o_ref = result[31:0];
 		end else begin
 			// instruction is mulh (multiply MSB)
-			MULT_O_REF = RESULT[63:32];
+			mult_o_ref = result[63:32];
 		end
 	end else begin
-		MULT_O_REF = 0;
+		mult_o_ref = 0;
 	end
 endtask : ref_model
 

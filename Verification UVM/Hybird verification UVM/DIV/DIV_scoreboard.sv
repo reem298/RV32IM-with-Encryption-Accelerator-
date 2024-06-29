@@ -61,7 +61,7 @@ task ref_model(div_seq_item seq_item_chk);
 	if(seq_item_chk.enable_div) begin
 		Quotient = seq_item_chk.oper_a / seq_item_chk.oper_b;
 		Remainder= seq_item_chk.oper_a % seq_item_chk.oper_b;
-		if(seq_item_chk.fuct3) begin
+		if(seq_item_chk.operation) begin
 			div_o_ref = Quotient ;
 		end else begin
           div_o_ref= Remainder;

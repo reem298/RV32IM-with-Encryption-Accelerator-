@@ -23,11 +23,11 @@ task run_phase(uvm_phase phase);
 	forever begin 
 		stim_seq_item = mult_seq_item::type_id::create("stim_seq_item");
 		seq_item_port.get_next_item(stim_seq_item);
-		mult_driver_vif.OPER_A = stim_seq_item.OPER_A;
-		mult_driver_vif.OPER_B = stim_seq_item.OPER_B; 	
-		mult_driver_vif. ENABLE_MULT = stim_seq_item. ENABLE_MULT; 
-		mult_driver_vif. FUCT3 = stim_seq_item.FUCT3 ; 
-		#10;
+		mult_driver_vif.oper_a = stim_seq_item.oper_a;
+		mult_driver_vif.oper_b = stim_seq_item.oper_b; 	
+		mult_driver_vif. enable_mult = stim_seq_item. enable_mult; 
+		mult_driver_vif. operation = stim_seq_item.operation ; 
+		@(negedge mult_driver_vif.clk);
 		seq_item_port.item_done();
 		`uvm_info("run_phase", stim_seq_item.convert2string_stimulus(), UVM_HIGH)
 		end

@@ -10,11 +10,9 @@ class div_seq_item extends uvm_sequence_item;
 `uvm_object_utils(div_seq_item)
 
 parameter length =32;
-rand bit signed [length-1:0] oper_a,oper_b;
-rand bit fuct3,enable_div;
-bit divided_by_zero;
-bit signed [length-1:0] div_o;
-bit div_finish;
+rand logic signed [length-1:0] oper_a,oper_b;
+rand logic operation,enable_div;
+logic signed [length-1:0] div_o;
 
 
 constraint c1 {  
@@ -31,11 +29,11 @@ function new (string name = "div_seq_item");
 endfunction
 
 function string convert2string();
-	return $sformatf("%s oper_a = 0h%0h, oper_b = 0h%0h, enable_div = 0h%0h, fuct3= 0h%0h, div_o=0h%0h", super.convert2string, oper_a, oper_b, enable_div,fuct3, div_o);
+	return $sformatf("%s oper_a = 0h%0h, oper_b = 0h%0h, enable_div = 0h%0h, operation= 0h%0h, div_o=0h%0h", super.convert2string, oper_a, oper_b, enable_div,operation, div_o);
 endfunction : convert2string
 
 function string convert2string_stimulus();
-			return $sformatf(" oper_a= 0h%0h, oper_b= 0h%0h, enable_div=0h%0h, fuct3= 0h%0h, div_o=0h%0h", oper_a, oper_b, enable_div,fuct3, div_o);
+			return $sformatf(" oper_a= 0h%0h, oper_b= 0h%0h, enable_div=0h%0h, operation= 0h%0h, div_o=0h%0h", oper_a, oper_b, enable_div,operation, div_o);
 endfunction : convert2string_stimulus
 
 endclass : div_seq_item	
