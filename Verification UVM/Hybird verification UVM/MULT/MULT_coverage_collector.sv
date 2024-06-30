@@ -14,12 +14,18 @@ uvm_tlm_analysis_fifo #(mult_seq_item) cov_fifo;
 
 mult_seq_item seq_item_cov;
 
-covergroup cg();
-oper_a: coverpoint seq_item_cov.oper_a;
-oper_b: coverpoint seq_item_cov.oper_b;
-enable_mult: coverpoint seq_item_cov.enable_mult;
-operation: coverpoint seq_item_cov.operation;
-mult_o: coverpoint seq_item_cov.mult_o;
+covergroup cg(); 
+//oper_a: coverpoint seq_item_cov.oper_a;
+//oper_b: coverpoint seq_item_cov.oper_b;
+enable_mult: coverpoint seq_item_cov.enable_mult{
+  bins enable_mult ={1};
+  bins notenable_mult={0};
+}
+operation: coverpoint seq_item_cov.operation{
+  bins operation_high={1};
+  bins operation_low={0};
+}
+//mult_o: coverpoint seq_item_cov.mult_o;
 
 //cross coverage
 //cross operation,mult_o;

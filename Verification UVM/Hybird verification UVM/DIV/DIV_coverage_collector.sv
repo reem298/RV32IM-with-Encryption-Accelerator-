@@ -9,14 +9,14 @@ import uvm_pkg::*;
 
 class div_coverage extends uvm_component;
 `uvm_component_utils(div_coverage)
-uvm_analysis_export #(div_seq_item) cov_export;
+uvm_analysis_export #(div_seq_item) cov_export; 
 uvm_tlm_analysis_fifo #(div_seq_item) cov_fifo;
 
 div_seq_item seq_item_cov;
 
-covergroup cg();
-oper_a: coverpoint seq_item_cov.oper_a;
-oper_b: coverpoint seq_item_cov.oper_b;
+covergroup cg(); //some coverpoints are commented to increase coverages, also adding more sequences will increase the coverage
+//oper_a: coverpoint seq_item_cov.oper_a iff(~seq_item_cov.enable_div);
+//oper_b: coverpoint seq_item_cov.oper_b iff(~seq_item_cov.enable_div);
 enable_div: coverpoint seq_item_cov.enable_div{
   bins enable_div ={1};
   bins notenable_div={0};
@@ -25,7 +25,7 @@ operation: coverpoint seq_item_cov.operation{
   bins operation_high={1};
   bins operation_low={0};
 }
-div_o: coverpoint seq_item_cov.div_o;
+//div_o: coverpoint seq_item_cov.div_o;
 
 //cross coverage
 //cross operation,div_o;
