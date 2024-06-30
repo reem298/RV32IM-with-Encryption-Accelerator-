@@ -6,10 +6,11 @@ module ALU #(parameter data_width = 32)
   input  logic signed [data_width-1:0] operand_A,
   input  logic signed [data_width-1:0] operand_B,
   output logic signed [data_width-1:0] ALU_result,
-  output logic [data_width-1:0] is_less,
   output logic Branch_taken,
   output logic signed [data_width-1:0] JALR_target,
   output logic hold_pipeline,
+  output logic pc_s_a_1,
+  output logic ex,  
   output logic zero
   //output logic carry,
   //output logic overflow,
@@ -27,8 +28,9 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
  always @(*) begin
  ALU_result=32'b0;
- is_less=32'b0;
  Branch_taken=1'b0;
+ pc_s_a_1=0;
+ ex=1;  
  JALR_target=32'b0;
  hold_pipeline=1'b0;
  zero=1'b0;
@@ -50,9 +52,11 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
      // Signed Less Than (SLTI, SLT)
      6'b000010: begin
-      	if(Less)  is_less=32'b1; // Signed Less Than(SLTI,SLT)
+      	if(Less==1'b1)begin
+          ALU_result=32'b1; // Signed Less Than(SLTI,SLT)
+        end  
         else
-          is_less=32'b0;
+          ALU_result=32'b0;
       end
      //Jump and link rigister (JALR)
      6'b100111: begin 
@@ -132,17 +136,38 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
       endcase
     end
 
-	default:begin
-   ALU_result= 32'b0;  Branch_taken=1'b0; hold_pipeline=1'b0; zero=1'b0;// Default Case
+	default:
+begin
+  ALU_result=32'b0;
+ Branch_taken=1'b0;
+ pc_s_a_1=0;
+ ex=1;  
+ JALR_target=32'b0;
+ hold_pipeline=1'b0;
+ zero=1'b0;// Default Case
  end
   endcase
 
 //hold_pipeline signal(branch instructions)
-if (Branch_taken==1 && operand_B[11]==0) begin
-  hold_pipeline=1'b1;
+if ((Branch_taken==1 && operand_B[11]==0))
+begin
+                 hold_pipeline=1'b1;
+                 ex = 0;
+                 pc_s_a_1=0;
 end
-else begin
-  hold_pipeline=1'b0;
+else if (ALU_Control == 6'b100111 && operand_A != 'b0 )
+begin
+                 hold_pipeline=1'b1;
+                 ex = 0;
+                 pc_s_a_1=1;
+end
+
+else
+  
+begin
+                 hold_pipeline=1'b0;
+                 ex = 1;
+                 pc_s_a_1=0;
 end
 
 end

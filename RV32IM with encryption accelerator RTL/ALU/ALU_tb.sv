@@ -10,10 +10,11 @@ module ALU_tb;
   logic signed [data_width-1:0] ALU_result;
   //logic is_equal,
   //logic is_greater,
-  logic is_less;
   logic Branch_taken;
   logic signed [data_width-1:0] JALR_target;
   logic hold_pipeline;
+  logic pc_s_a_1;
+  logic ex;
   logic zero;
   //logic carry;
   //logic overflow;
@@ -28,10 +29,11 @@ module ALU_tb;
     .ALU_result(ALU_result),
     //.is_equal(is_equal),
     //.is_greater(is_greater),
-    .is_less(is_less),
     .Branch_taken(Branch_taken),
     .JALR_target(JALR_target),
     .hold_pipeline(hold_pipeline),
+     .pc_s_a_1(pc_s_a_1),
+     .ex(ex),
     .zero(zero)
    // .carry(carry),
     //.overflow(overflow),
@@ -97,7 +99,7 @@ initial begin
     operand_B = $random;
   // Wait for the ALU to compute the result
     #10;     
-$display("SLTI: %d  %d  %d", operand_A,is_less, operand_B);
+$display("SLTI: %d  %d  %d", operand_A,ALU_result, operand_B);
 
 
 //Test case 6:  Branch Operations
@@ -105,21 +107,78 @@ ALU_Control= 6'b010000;
 operand_A = $random;
 operand_B = $random;
 #10;
+$display("BEQ- ALU control is %b",ALU_Control);
   $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
 
+
+ALU_Control= 6'b010001;
+operand_A = $random;
+operand_B = $random;
+#10;
+$display("BNE- ALU control is %b",ALU_Control);
+  $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
 
 ALU_Control= 6'b10010;
 operand_A = $random;
 operand_B = $random;
 #10;
+$display("BLT- ALU control is %b",ALU_Control);
   $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
 
-
-ALU_Control= 6'b010000;
+  ALU_Control= 6'b010101;
 operand_A = $random;
 operand_B = $random;
 #10;
+$display("BGE- ALU control is %b",ALU_Control);
   $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
+
+    ALU_Control= 6'b010110;
+operand_A = $random;
+operand_B = $random;
+#10;
+$display("BLTU- ALU control is %b",ALU_Control);
+  $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
+
+
+  
+ALU_Control= 6'b010111;
+operand_A = $random;
+operand_B = $random;
+#10;
+$display("BGEU- ALU control is %b",ALU_Control);
+  $display("Branch_taken %d", Branch_taken);
+  $display("pc_s_a_1: %b", pc_s_a_1);
+  $display("ex: %b", ex);
+  $display("Zero: %b", zero);
+
+
+// Signed Less Than (SLTI, SLT)
+  ALU_Control =6'b000010;
+  operand_A = $random;
+operand_B = $random;
+#10;
+// Display the outputs
+    $display("ALU_Control: %d", ALU_Control);
+    $display("operand_A: %d", operand_A);
+    $display("operand_B: %d", operand_B);
+    $display("ALU_result: %d", ALU_result);
+
+
 
 //random cases 
 ALU_Control= $random;
@@ -133,6 +192,8 @@ operand_B = $random;
     $display("ALU_result: %d", ALU_result);
     $display("Zero: %b", zero);
     $display("Branch_taken %d", Branch_taken);
+    $display("pc_s_a_1: %b", pc_s_a_1);
+    $display("ex: %b", ex);
     $display("JALR_target %d", JALR_target);
     $display("hold_pipeline %d", hold_pipeline);
 
@@ -149,6 +210,8 @@ operand_B = $random;
     $display("ALU_result: %d", ALU_result);
     $display("Zero: %b", zero);
     $display("Branch_taken %d", Branch_taken);
+    $display("pc_s_a_1: %b", pc_s_a_1);
+    $display("ex: %b", ex);
     $display("JALR_target %d", JALR_target);
     $display("hold_pipeline %d", hold_pipeline);
 
@@ -165,8 +228,26 @@ operand_B = $random;
     $display("ALU_result: %d", ALU_result);
     $display("Zero: %b", zero);
     $display("Branch_taken %d", Branch_taken);
+    $display("pc_s_a_1: %b", pc_s_a_1);
+    $display("ex: %b", ex);
     $display("JALR_target %d", JALR_target);
     $display("hold_pipeline %d", hold_pipeline);
+
+
+
+
+
+  // Signed Less Than (SLTI, SLT)
+  ALU_Control =6'b000010;
+  operand_A = -1246;
+operand_B = 789;
+#10;
+// Display the outputs
+    $display("ALU_Control: %d", ALU_Control);
+    $display("operand_A: %d", operand_A);
+    $display("operand_B: %d", operand_B);
+    $display("ALU_result: %d", ALU_result);
+   
 
 
 end
