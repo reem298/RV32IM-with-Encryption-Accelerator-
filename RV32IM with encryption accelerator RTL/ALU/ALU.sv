@@ -30,7 +30,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
  ALU_result=32'b0;
  Branch_taken=1'b0;
  pc_s_a_1=0;
- ex=1;  
+ ex=0;  
  JALR_target=32'b0;
  hold_pipeline=1'b0;
  zero=1'b0;
@@ -152,13 +152,13 @@ begin
 if ((Branch_taken==1 && operand_B[11]==0))
 begin
                  hold_pipeline=1'b1;
-                 ex = 0;
+                 ex = 1;
                  pc_s_a_1=0;
 end
 else if (ALU_Control == 6'b100111 && operand_A != 'b0 )
 begin
                  hold_pipeline=1'b1;
-                 ex = 0;
+                 ex = 1;
                  pc_s_a_1=1;
 end
 
@@ -166,7 +166,7 @@ else
   
 begin
                  hold_pipeline=1'b0;
-                 ex = 1;
+                 ex = 0;
                  pc_s_a_1=0;
 end
 
