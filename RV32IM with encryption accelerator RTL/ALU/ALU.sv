@@ -138,7 +138,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 begin
   ALU_result=32'b0;
  Branch_taken=1'b0;
- ex=1;  
+ ex=0;  
  JALR_target=32'b0;
  hold_pipeline=1'b0;
  zero=1'b0;// Default Case
