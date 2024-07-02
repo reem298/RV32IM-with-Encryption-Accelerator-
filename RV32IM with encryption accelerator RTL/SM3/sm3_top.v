@@ -8,8 +8,9 @@ module top_sm3(
   input    wire  [31:0]     message      ,  // Input message
   
   output   wire             hold_pipline ,  // Signal to hold the pipeline
-  output   wire   [255:0]   hash_value      // Computed hash value
-  
+  output   wire   [255:0]   hash_value ,     // Computed hash value
+  output   wire			            save_hash              // indicate that the hash_value is ready to store in memory
+ 
   );
   
   wire            start  ,  // Start signal for the hashing process
@@ -79,12 +80,16 @@ module top_sm3(
   .s      ( s    ),  // Intermediate variable
   .Flag   ( FLAG ),  // Flag signal
   .temp_v ( iv   )); // Intermediate hash value
+ 
+
   
   // Assigning the start signal based on the valid_in and FLAG signals
   assign start        = (!valid_in) ? 'b0        : (!FLAG)  ? 'b1 : 'b0      ;
 
   // Assigning the hash value based on the reset and FLAG signals 
   assign hash_value   = (!rst)      ? 'h0        : (!FLAG)  ? 'h0 : iv ^ IV  ;
+  // Assigning the hash value based on the reset and FLAG signals
+  assign save_hash   = (!rst)      ? 'h0        : (!FLAG)  ? 'h0 : 'b1  ;
   
   // Assigning the hold_pipeline signal based on the valid_in and FLAG signals
   assign hold_pipline = (!valid_in) ? 'b0        : (!FLAG)  ? 'b1 : 'b0      ;
