@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Engineer:       Mohamed Atef - mohamedatefp3@gmail.com                     //
-//                                                                            //               
+// Engineer:       Mohamed Atef    - mohamedatefp3@gmail.com                  //
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
 //                                                                            //
 // Design Name:    message_padding                                            //
 // Project Name:   zero-riscy                                                 //

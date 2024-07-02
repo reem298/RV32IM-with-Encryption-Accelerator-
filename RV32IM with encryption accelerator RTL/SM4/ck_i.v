@@ -1,3 +1,13 @@
+///////////////////////////////////////////////////////////////////////////////
+// Engineer:       Mohamed Atef - mohamedatefp3@gmail.com                     //
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
+//                                                                            //
+// Design Name:    Ck_i                                                       //
+// Project Name:   zero-riscy                                                 //
+// Language:       Verilog                                                    //
+//                                                                            //               
+////////////////////////////////////////////////////////////////////////////////
+
 module get_cki	
 	(
 		 clk,
