@@ -19,6 +19,9 @@ input [ADDRESS_BITS-1:0] pc         ,
 input [ADDRESS_BITS-1:0] pc_next    ,
 input [31:0] instruction            ,
 
+
+//inputs from Encryption
+input out_of_loop_i                 ,
 //inputs from alu
 //input [ADDRESS_BITS-1:0] JALR_target,
 input branch                        ,
@@ -130,13 +133,15 @@ assign target_pc = (op == 7'b1101111)  ? (pc + j_imm_ext) : //jal instruction
                    //Static Prediction
                    (op == 7'b1100011) && (branch || instruction[7]) ? (pc + b_imm_ext) : //branch instructions
                    (op == 7'b1100111) && (read_sel1 == 'd0)         ? j_imm_ext        : //JALR
-                  // (op == 7'b1100111) && (read_sel1 != 'd0)       ? JALR_target      : //JALR
-                   0; 
+                   (op  == 7'b0001011)                              ? pc               :
+                    0; 
  
  
- assign pc_s_d   =  (op  == 7'b1101111) ? 2'b1                                :// selection for correct prediction of jal instructions 
-                    ((op == 7'b1100011) && (branch || instruction[7])) ? 2'b1 :// selection for correct prediction of branch instructions 
-                    (op  == 7'b1100111) && (read_sel1 == 'd0)          ? 2'b1 :// selection for correct prediction of JALR instructions 
+ assign pc_s_d   =  (op  == 7'b1101111) ? 1'b1                                :// selection for correct prediction of jal instructions 
+                    ((op == 7'b1100011) && (branch || instruction[7]))  ? 1'b1 :// selection for correct prediction of branch instructions 
+                    ((op == 7'b1100111) && (read_sel1 == 'd0))          ? 1'b1 :// selection for correct prediction of JALR instructions 
+                    ((op == 7'b0001011) &&  (!out_of_loop_i))           ? pc   :// hold pipline while encryption
+                    ((op == 7'b0001011) &&  (out_of_loop_i))            ? 1'b0 :
                     0;
                            
  assign flag     =  (op  == 7'b1100111) && (read_sel1 != 'd0)          ? 1'b0 :// selection for false prediction of JALR instructions
