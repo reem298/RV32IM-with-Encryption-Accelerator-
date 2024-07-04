@@ -1,21 +1,32 @@
 //ALU of RV32IM 
 //Author: reem ahmed ali
 module ALU #(parameter data_width = 32)
-(
-  input  logic [5:0] ALU_Control,
-  input  logic signed [data_width-1:0] operand_A,
-  input  logic signed [data_width-1:0] operand_B,
-  output logic signed [data_width-1:0] ALU_result,
-  output logic Branch_taken,
-  output logic signed [data_width-1:0] JALR_target,
-  output logic hold_pipeline,
-  output logic pc_s_a_1,
-  output logic ex,  
-  output logic zero
-  //output logic carry,
-  //output logic overflow,
-  //output logic negative
-);
+( ALU_interface.DUT aluIF);
+
+  logic [5:0] ALU_Control;
+  logic signed [data_width-1:0] operand_A;
+  logic signed [data_width-1:0] operand_B;
+  logic signed [data_width-1:0] ALU_result;
+  logic Branch_taken;
+  logic signed [data_width-1:0] JALR_target;
+  logic hold_pipeline;
+  logic pc_s_a_1;
+  logic ex;  
+  logic zero;
+
+assign ALU_Control=aluIF.ALU_Control;
+assign operand_A=aluIF.operand_A;
+assign operand_B=aluIF.operand_B;
+//outputs
+assign aluIF.ALU_result=ALU_result;
+assign aluIF.Branch_taken=Branch_taken;
+assign aluIF.JALR_target=JALR_target;
+assign  aluIF.hold_pipeline=hold_pipeline;
+assign aluIF.pc_s_a_1=pc_s_a_1;
+assign  aluIF.ex=ex;  
+assign aluIF.zero=zero;
+
+
 
 //internal wires of ALU assigned to the output of the comparator 
 logic Greater,Equal,Less;
@@ -96,7 +107,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
    hold_pipeline=1'b0;
    zero=1'b0;
     end
-     6'b001101:begin
+	   6'b001101:begin
       ALU_result=operand_A >>> operand_B;// Arithmetic Shift Right (SRAI, SRA)
       Branch_taken=1'b0;
     pc_s_a_1=0;
@@ -108,7 +119,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
      // Signed Less Than (SLTI, SLT)
      6'b000010: begin
-        if(Less==1'b1)begin
+      	if(Less==1'b1)begin
           ALU_result=32'b1; // Signed Less Than(SLTI,SLT)
           Branch_taken=1'b0;
           pc_s_a_1=1'b0;
@@ -140,7 +151,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
      // Branch Operations (BEQ, BNE, BLT, BGE, BLTU)
      6'b010000: begin // BEQ
-      if(Equal)begin
+     	if(Equal)begin
       Branch_taken=1'b1;
       zero=1'b1;
       ALU_result=32'b0;
@@ -183,7 +194,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
   end
 
     6'b000010: begin// BLT
-      if(Less)begin
+    	if(Less)begin
       Branch_taken=1'b1;
          zero=1'b0;
             ALU_result=32'b0;
@@ -246,7 +257,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
 
     //unsined
     6'b010110:begin  // BLTU
-      if(Less) begin
+    	if(Less) begin
       Branch_taken=1'b1;
       zero= 1'b0;
           ALU_result=32'b0;
@@ -308,7 +319,7 @@ ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater
       endcase
     end
 
-  default:
+	default:
 begin
   ALU_result=32'b0;
  Branch_taken=1'b0;
