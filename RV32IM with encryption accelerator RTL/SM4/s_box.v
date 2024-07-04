@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// Engineer:       Mohamed Atef - mohamedatefp3@gmail.com                     //
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
+//                                                                            //
+// Design Name:    Sbox                                                       //
+// Project Name:   zero-riscy                                                 //
+// Language:       Verilog                                                    //
+//                                                                            //
+// Description:   replace the number from the table of sbox                   //                                                   
+////////////////////////////////////////////////////////////////////////////////
+
 module sbox_replace	
 (
 input	     [7:0]	data_in    ,

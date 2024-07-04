@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// Engineer:       Mohamed Atef    - mohamedatefp3@gmail.com                  //
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
+//                                                                            //
+// Design Name:    one_round_for_key_exp                                      //
+// Project Name:   zero-riscy                                                 //
+// Language:       Verilog                                                    //
+//                                                                            //
+// Description:   initializaation of the key                                  //
+////////////////////////////////////////////////////////////////////////////////
+
 module one_round_for_key_exp (
 	
 

@@ -1,11 +1,11 @@
-module fetch_cycle (clk , rst , pc_s_in , pc_dec_in , pc_alu_in , pc_out, pc_plus4);
+module fetch_cycle(clk , rst , pc_s_in , pc_target_in ,pc_out);
 
     // Declare input & outputs
-    input          clk, rst;
-    input  [1:0]   pc_s_in;
-    input  [31:0]  pc_dec_in , pc_alu_in ;
-    output [31:0]  pc_out   ;
-    output [31:0]  pc_plus4 ;
+    input clk, rst;
+    input pc_s_in;
+    input [31:0] pc_target_in;
+    output [31:0] pc_out   ;
+   // output [31:0] pc_plus4 ;
 
     // Declaring interim wires
     wire [31:0] PC_F, PCF, PCPlus4F;
@@ -17,11 +17,10 @@ module fetch_cycle (clk , rst , pc_s_in , pc_dec_in , pc_alu_in , pc_out, pc_plu
 
     // Initiation of Modules
     // Declare PC Mux
-    Mux PC_MUX  (.a(PCPlus4F),
-                .b(pc_dec_in),
-                .c(pc_alu_in),
+    Mux PC_MUX (.a(PCPlus4F),
+                .b(pc_target_in),
                 .s(pc_s_in),
-                .d(PC_F)
+                .c(PC_F)
                 );
 
     // Declare PC Counter
@@ -43,17 +42,16 @@ module fetch_cycle (clk , rst , pc_s_in , pc_dec_in , pc_alu_in , pc_out, pc_plu
     always @(posedge clk or negedge rst) begin
         if(!rst) begin
             PCF_reg <= 32'h00000000;
-            PCPlus4F_reg <= 32'h00000000;
+           // PCPlus4F_reg <= 32'h00000000;
         end
-        else
-        begin
-         PCF_reg       <= PCF;
-         PCPlus4F_reg  <= PCPlus4F; 
-       end 
+        else begin
+            PCF_reg       <= PCF;
+          //  PCPlus4F_reg  <= PCPlus4F; 
+        end
     end
 
 
     // Assigning Registers Value to the Output port
     assign  pc_out   = (rst == 1'b0) ? 32'h00000000 : PCF_reg;
-    assign  pc_plus4 = (rst == 1'b0) ? 32'h00000000 : PCPlus4F_reg;
-endmodule
+   // assign  pc_plus4 = (rst == 1'b0) ? 32'h00000000 : PCPlus4F_reg;
+endmodule        

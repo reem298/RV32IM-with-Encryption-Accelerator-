@@ -1,3 +1,14 @@
+///////////////////////////////////////////////////////////////////////////////
+// Engineer:       Mohamed Atef - mohamedatefp3@gmail.com                     //
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
+//                                                                            //
+// Design Name:    DATA_SAVE                                                  //
+// Project Name:   zero-riscy                                                 //
+// Language:       Verilog                                                    //
+//                                                                            //
+// Description:   memory to save the outputs                                  //
+////////////////////////////////////////////////////////////////////////////////
+
 module DATA_SAVE (
 input                 clk,
 input                 rst,

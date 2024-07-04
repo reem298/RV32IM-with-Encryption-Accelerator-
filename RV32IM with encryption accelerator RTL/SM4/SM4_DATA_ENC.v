@@ -1,11 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Engineer:       Mohamed Atef - mohamedatefp3@gmail.com                     //
-//                                                                            //               
+//                 mostafa mahmoud - mostafamhamoud192@gmail.com              //               
 //                                                                            //
 // Design Name:    Data_Encryption                                            //
 // Project Name:   zero-riscy                                                 //
 // Language:       Verilog                                                    //
-//                                                                            //                                                   //
+//                                                                            //                                                   
 ////////////////////////////////////////////////////////////////////////////////
 module SM4_DATA_ENC #(parameter DATA_IN_BITS = 128 , DATA_OUT_BITS = 128)
 (

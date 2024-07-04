@@ -26,7 +26,7 @@ logic Greater,Equal,Less;
 //comparator intantiation
 ALU_Comparator #(32)  cmp (.operand_A(operand_A),.operand_B(operand_B), .Greater(Greater), .Equal(Equal), .Less(Less));
 
- always @(*) begin
+  always @(*) begin
 
   case(ALU_Control)
     // Addition and Subtraction
