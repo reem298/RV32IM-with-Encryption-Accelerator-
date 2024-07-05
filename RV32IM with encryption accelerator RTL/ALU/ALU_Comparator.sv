@@ -28,17 +28,18 @@ module ALU_Comparator #(parameter data_width = 32)
     //both positive
      difference = operand_B - operand_A;
     //outputs
-    Equal = (difference===0);
-    Greater = (difference[31] === 1); //negative result, operand_A is Greater than operand_B
-    Less = (difference[31] == 0) && (Equal===0); //positive result, operand_A is Less than operand_B
+    Equal = (~difference);
+    Greater = (difference[31] ); //negative result, operand_A is Greater than operand_B
+    Less = (~difference[31]) && (~Equal); //positive result, operand_A is Less than operand_B
    end
    else begin
      //both negative
      difference = $unsigned(operand_B) -$unsigned(operand_A);
-     Equal = (difference===0);
-    Greater = (difference[31] === 1); //negative result, operand_A is Greater than operand_B
-    Less = (difference[31] == 0) && (Equal===0); //positive result, operand_A is Less than operand_B
+     Equal = (~difference);
+    Greater = (difference[31]); //negative result, operand_A is Greater than operand_B
+    Less = (~difference[31]) && (Equal); //positive result, operand_A is Less than operand_B
    end    
   end
- endmodule  
-    
+ endmodule   
+
+

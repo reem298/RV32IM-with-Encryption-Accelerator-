@@ -321,13 +321,13 @@ begin
   endcase
 
 //hold_pipeline signal(branch instructions)
-if ((Branch_taken===1'b1 && operand_B[11]==0))
+if ((Branch_taken && ~operand_B[11]))
 begin
                  hold_pipeline=1'b1;
                  ex = 1;
                  pc_s_a_1=0;
 end
-else if (ALU_Control === 6'b100111 && (|operand_A )!= 32'b0 )
+else if (~(ALU_Control - 6'b100111)&& (operand_A) ) //ALU_Control === 6'b100111 and operand_a is not zeros
 begin
                  hold_pipeline=1'b1;
                  ex = 1;
