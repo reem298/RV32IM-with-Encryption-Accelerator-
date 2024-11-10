@@ -1,0 +1,181 @@
+Coverage Report by instance with details
+
+=================================================================================
+=== Instance: /\MULT_top /multIF
+=== Design Unit: work.MULT_interface
+=================================================================================
+Toggle Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Toggles                        198       198         0   100.00%
+
+================================Toggle Details================================
+
+Toggle Coverage for instance /\MULT_top /multIF --
+
+                                              Node      1H->0L      0L->1H  "Coverage"
+                                              ---------------------------------------
+                                               clk           1           1      100.00 
+                                       enable_mult           1           1      100.00 
+                                      mult_o[31-0]           1           1      100.00 
+                                      oper_a[31-0]           1           1      100.00 
+                                      oper_b[31-0]           1           1      100.00 
+                                         operation           1           1      100.00 
+
+Total Node Count     =         99 
+Toggled Node Count   =         99 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =     100.00% (198 of 198 bins)
+
+=================================================================================
+=== Instance: /\MULT_top /DUT
+=== Design Unit: work.mult
+=================================================================================
+Branch Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Branches                         4         4         0   100.00%
+
+================================Branch Details================================
+
+Branch Coverage for instance /\MULT_top /DUT
+
+    Line         Item                      Count     Source 
+    ----         ----                      -----     ------ 
+  File mult.sv
+------------------------------------IF Branch------------------------------------
+    16                                     10001     Count coming in to IF
+    16              1                       5043        if(enable_mult) begin
+    25              1                       4958        end else begin
+Branch totals: 2 hits of 2 branches = 100.00%
+
+------------------------------------IF Branch------------------------------------
+    18                                      5043     Count coming in to IF
+    18              1                       2515           if(!operation) begin
+    21              1                       2528           end else begin
+Branch totals: 2 hits of 2 branches = 100.00%
+
+
+Statement Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Statements                       9         9         0   100.00%
+
+================================Statement Details================================
+
+Statement Coverage for instance /\MULT_top /DUT --
+
+    Line         Item                      Count     Source 
+    ----         ----                      -----     ------ 
+  File mult.sv
+    1                                                module mult #(parameter length=32)(MULT_interface.DUT multIF);
+    2                                                  
+    3                                                   logic signed [length-1:0] oper_a,oper_b;
+    4                                                   logic  enable_mult,operation;
+    5                                                   logic signed [length-1:0] mult_o;
+    6                                                   logic signed [63:0] result;
+    7                                                
+    8               1                      10002        assign oper_a= multIF.oper_a;
+    9               1                      10002        assign oper_b= multIF.oper_b;
+    10              1                       4948        assign operation=multIF.operation;
+    11              1                       5025        assign enable_mult=multIF.enable_mult;
+    12                                                  assign multIF.mult_o= mult_o;
+    13                                               
+    14                                               
+    15              1                      10001        always @(*) begin 
+    16                                                  if(enable_mult) begin
+    17              1                       5043           result = oper_a *oper_b;
+    18                                                     if(!operation) begin
+    19                                                        // instruction is mul (multiply LSB)
+    20              1                       2515              mult_o = result[31:0];
+    21                                                     end else begin
+    22                                                        // instruction is mulh (multiply MSB)
+    23              1                       2528              mult_o = result[63:32];
+    24                                                     end
+    25                                                  end else begin
+    26              1                       4958           mult_o = 0;
+
+Toggle Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Toggles                        324       324         0   100.00%
+
+================================Toggle Details================================
+
+Toggle Coverage for instance /\MULT_top /DUT --
+
+                                              Node      1H->0L      0L->1H  "Coverage"
+                                              ---------------------------------------
+                                       enable_mult           1           1      100.00 
+                                      mult_o[31-0]           1           1      100.00 
+                                      oper_a[31-0]           1           1      100.00 
+                                      oper_b[31-0]           1           1      100.00 
+                                         operation           1           1      100.00 
+                                      result[63-0]           1           1      100.00 
+
+Total Node Count     =        162 
+Toggled Node Count   =        162 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =     100.00% (324 of 324 bins)
+
+=================================================================================
+=== Instance: /\MULT_top 
+=== Design Unit: work.MULT_top
+=================================================================================
+Statement Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Statements                       6         6         0   100.00%
+
+================================Statement Details================================
+
+Statement Coverage for instance /\MULT_top  --
+
+    Line         Item                      Count     Source 
+    ----         ----                      -----     ------ 
+  File MULT_top.sv
+    12                                               module MULT_top(/*MULT_interface.TEST multIF */);
+    13                                               	bit clk;
+    14                                               
+    15                                               	/* Clock Generation */
+    16                                               	initial begin 
+    17              1                          1     		clk = 0;
+    18              1                          1     		forever 
+    19              1                      20003     			#1 clk = ~clk;
+    19              2                      20002     
+    20                                                      end
+    21                                               
+    22                                               MULT_interface multIF(clk);
+    23                                               //mult_radix8_top DUT(multIF);
+    24                                               mult DUT(multIF);
+    25                                               	//assertions bind
+    26                                               
+    27                                               //interface handle in the config. databse & runnig test
+    28                                               initial begin
+    29              1                          1     		uvm_config_db#(virtual MULT_interface)::set(null, "uvm_test_top", "MULT_INTERFACE", multIF); 
+    30              1                          1     		run_test("mult_test");
+
+Toggle Coverage:
+    Enabled Coverage              Bins      Hits    Misses  Coverage
+    ----------------              ----      ----    ------  --------
+    Toggles                          2         2         0   100.00%
+
+================================Toggle Details================================
+
+Toggle Coverage for instance /\MULT_top  --
+
+                                              Node      1H->0L      0L->1H  "Coverage"
+                                              ---------------------------------------
+                                               clk           1           1      100.00 
+
+Total Node Count     =          1 
+Toggled Node Count   =          1 
+Untoggled Node Count =          0 
+
+Toggle Coverage      =     100.00% (2 of 2 bins)
+
+
+Total Coverage By Instance (filtered view): 100.00%
+

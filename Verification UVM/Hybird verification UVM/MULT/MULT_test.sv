@@ -29,7 +29,6 @@ endfunction
 function void build_phase (uvm_phase phase);
 	super.build_phase(phase);
 	env = mult_env::type_id::create("env", this);
-	agt = mult_agent::type_id::create("agt", this);
 	mult_config_obj_test = mult_config_obj::type_id::create("mult_config_obj_test", this);
 	main_seq= mult_main_sequence::type_id::create("main_seq", this);
 	enable_seq=mult_enable_sequence::type_id::create("enable_seq", this);

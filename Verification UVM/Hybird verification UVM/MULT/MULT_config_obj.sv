@@ -10,7 +10,7 @@ package MULT_config_obj;
 	class mult_config_obj extends uvm_object;
 		`uvm_object_utils(mult_config_obj)
 
-//cf object holds virtual if from the test to the driver
+//cf object holds virtual if from UVM compnent to other Component "test_top"
  		virtual MULT_interface mult_config_vif;
 
 //constructor

@@ -31,7 +31,8 @@ operation: coverpoint seq_item_cov.operation{
 //cross operation,mult_o;
 
 
-endgroup : cg	
+endgroup : cg 
+	
 
 //constructor
 function new (string name = "mult_coverage", uvm_component parent = null);

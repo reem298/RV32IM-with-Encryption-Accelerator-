@@ -80,14 +80,14 @@ begin
         mult_o=sum[length-1:0];
      //   mult_finish='b1;
       end
-    else if (sum[2*length-1] )
-          begin
+/*    else if (&sum[2*length-1:length] )
+         begin
             sum= sum+ 'b100000000000000000000000000000000;
         mult_o=sum[2*length-1:length];
       //  mult_finish='b1;
         
       end
-    else
+ */   else
       begin
        mult_o=sum[2*length-1:length];
       //  mult_finish='b1;
